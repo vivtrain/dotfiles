@@ -1,20 +1,19 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
-  "version": 2,
-  "final_space": true,
   "blocks": [
     {
       "type": "prompt",
       "alignment": "left",
       "segments": [
         {
-          "type": "python",
-          "style": "plain",
-          "template": "({{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }})",
           "properties": {
+            "cache_duration": "none",
             "fetch_version": false
           },
-          "foreground": "white"
+          "template": "({{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }})",
+          "foreground": "white",
+          "type": "python",
+          "style": "plain"
         }
       ]
     },
@@ -23,41 +22,52 @@
       "alignment": "left",
       "segments": [
         {
-          "type": "text",
-          "style": "plain",
-          "template": "\u256d\u2500 ",
-          "foreground": "#c9cccd"
-        },
-        {
-          "type": "session",
-          "style": "plain",
-          "template": "<49>\uf007 {{ .UserName }}</> <d><#73a7a7>in</></d> "
-        },
-        {
-          "type": "path",
-          "style": "plain",
-          "template": "\ue5ff {{ .Path }} ",
           "properties": {
+            "cache_duration": "none"
+          },
+          "template": "\u256d\u2500 ",
+          "foreground": "#c9cccd",
+          "type": "text",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "<49>\uf007 {{ .UserName }}</> <d><#73a7a7>in</></d> ",
+          "type": "session",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
             "style": "full"
           },
-          "foreground": "12"
+          "template": "\ue5ff {{ .Path }} ",
+          "foreground": "12",
+          "type": "path",
+          "style": "plain"
         },
         {
-          "type": "git",
-          "style": "diamond",
-          "template": "<#73a7a7>::</> {{ .UpstreamIcon }} {{ .HEAD }}{{ if .Staging.Changed }}<22> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} <#73a7a7>|{{ end }}{{ if .Working.Changed }}<203> \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
           "properties": {
-            "fetch_status": true,
+            "cache_duration": "none",
             "fetch_stash_count": true,
+            "fetch_status": true,
             "fetch_upstream_icon": true
           },
-          "foreground": "198"
+          "template": "<#73a7a7>::</> {{ .UpstreamIcon }} {{ .HEAD }}{{ if .Staging.Changed }}<22> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} <#73a7a7>|{{ end }}{{ if .Working.Changed }}<203> \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
+          "foreground": "198",
+          "type": "git",
+          "style": "diamond"
         },
         {
-          "type": "time",
-          "style": "plain",
+          "properties": {
+            "cache_duration": "none"
+          },
           "template": "<d>[{{ .CurrentDate | date .Format }}]</d>",
-          "foreground": "#73a7a7"
+          "foreground": "#73a7a7",
+          "type": "time",
+          "style": "plain"
         }
       ],
       "newline": true
@@ -67,10 +77,13 @@
       "alignment": "left",
       "segments": [
         {
-          "type": "text",
-          "style": "plain",
+          "properties": {
+            "cache_duration": "none"
+          },
           "template": "\u2570\u2500",
-          "foreground": "#c9cccd"
+          "foreground": "#c9cccd",
+          "type": "text",
+          "style": "plain"
         }
       ],
       "newline": true
@@ -80,14 +93,17 @@
       "alignment": "left",
       "segments": [
         {
-          "type": "text",
-          "style": "plain",
+          "properties": {
+            "cache_duration": "none"
+          },
           "template": "\ue0b0 ",
-          "foreground": "255"
+          "foreground": "255",
+          "type": "text",
+          "style": "plain"
         }
-      ],
-      "newline": false
+      ]
     }
-  ]
+  ],
+  "version": 3,
+  "final_space": true
 }
-
