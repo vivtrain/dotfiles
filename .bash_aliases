@@ -50,7 +50,7 @@ alias omp='oh-my-posh'
 
 # # Git
 alias gs='git status'
-alias gl='git log'
+alias gl='git log --graph'
 alias ga='git add'
 alias gc='git commit'
 alias gp='git push'
