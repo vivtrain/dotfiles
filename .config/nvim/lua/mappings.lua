@@ -17,7 +17,6 @@ map("n", "Q", "@@", { desc = "Repeat most recent macro" })
 map("n", "<c-space>", "<cmd> lua vim.diagnostic.open_float() <cr>", { desc = "Open float window" })
 map("n", "<c-n>", "<cmd> NvimTreeFocus <cr>", { desc = "NvimTree open or jump to explorer" })
 map("n", "U", "<c-r>", { desc = "Redo" })
-map("i", "<c-h>", "<c-w>", { desc = "Delete one word backwards" })
 
 local cmp = require("cmp")
 cmp.setup({
