@@ -1,17 +1,19 @@
 $include /etc/inputrc
 
+# See man page for bash, section READLINE, for more info
+
 set bell-style none
-
 set completion-ignore-case on
-
 set show-all-if-unmodified on
 
+# Completion settings
 TAB:menu-complete
 "\e[Z":menu-complete-backward
-Control-l:complete
 Control-x:shell-expand-line
 
+# Use vi mode and let the cursor show what mode you are in (uses ANSI esc codes)
 set show-mode-in-prompt on
 set vi-cmd-mode-string "\1\e[2 q\2"
 set vi-ins-mode-string "\1\e[6 q\2"
+set keyseq-timeout 50 # make esc key faster
 
