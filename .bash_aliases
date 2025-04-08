@@ -57,6 +57,8 @@ alias gp='git push'
 alias gd='git diff'
 alias gf='git fetch origin'
 alias gr='cd $(git rev-parse --show-toplevel)'
+alias prod='git switch production'
+alias dev='git switch development'
 
 
 # # Colors and highlights
