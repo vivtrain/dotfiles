@@ -9,10 +9,6 @@ case $- in
       *) return;;
 esac
 
-# Set the localization settings for languages, text-rendering, sort order, etc.
-#export LC_ALL='C'
-#export LANG='C'
-
 # Check if tmux has been started. If not, then set the path
 if [ -z "$TMUX" ]; then
     export PATH="\
@@ -28,7 +24,6 @@ export LESS='-R'
 
 # Vim as default editor
 EDITOR=/usr/bin/vim
-
 # Vi-like line editing on the command line
 set -o vi
 # Use physical directories for cd instead of symbolic links
@@ -79,7 +74,7 @@ if [ "$color_prompt" = yes ]; then
   export LESS_TERMCAP_mb=$'\e[94m'     # mode blink
   export LESS_TERMCAP_md=$'\e[94m'     # mode bold
   export LESS_TERMCAP_me=$'\e[0m'      # mode end
-  export LESS_TERMCAP_so=$'\e[30;103m'  # standout
+  export LESS_TERMCAP_so=$'\e[30;103m' # standout
   export LESS_TERMCAP_se=$'\e[0m'      # standout end
   export LESS_TERMCAP_us=$'\e[32m'     # underline start
   export LESS_TERMCAP_ue=$'\e[0m'      # underline end
@@ -150,6 +145,11 @@ fi
 # Set the environment variable for X11 via Xming on Windows WSL
 if [ -n $(uname -r | grep -i microsoft) ]; then
   export DISPLAY=$(awk '/nameserver/ {print $2}' < /etc/resolv.conf):0.0
+fi
+
+# Start an ssh agent by default
+if [ -z "$SSH_AUTH_SOCK" ]; then
+  eval `ssh-agent -s` > /dev/null
 fi
 
 # Use oh-my-posh if available
