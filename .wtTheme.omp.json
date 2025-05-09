@@ -63,7 +63,7 @@
         {
           "properties": {
             "cache_duration": "none",
-            "time_format": " Mon | 02/01 | 3:04:05 pm "
+            "time_format": " Mon | 01/02 | 3:04:05 pm "
           },
           "template": "[{{ .CurrentDate | date .Format }}]",
           "foreground": "#73a7a7",
