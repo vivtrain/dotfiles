@@ -30,7 +30,7 @@ alias mkdir='mkdir -m u=rwx,g=r,o=r'
 
 
 # # Shortcuts
-alias py='python'
+alias py='python3'
 alias py3='python3'
 #alias killpy='killall python'
 #alias open='nautilus $1 &>/dev/null'
