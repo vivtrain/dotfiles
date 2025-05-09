@@ -15,7 +15,7 @@ alias ll='ls -lhXv'
 alias la='ls -A'
 alias lla='ll -A'
 alias l='ll'
-alias tree='tree -v'
+alias tree='tree -vC'
 
 alias ppd='popd'
 alias pd=pushd $1

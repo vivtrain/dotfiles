@@ -139,7 +139,10 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 # Start tmux by default if available
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-    tmux new
+  tmux new-session -s tmux -e "WELCOMED=0"
+elif command -v tmux &> /dev/null && [ `tmux show-environment WELCOMED | sed 's/[[:alnum:]]*=//'` -eq 0 ]; then
+  source .welcome.sh
+  tmux set-environment WELCOMED 1 
 fi
 
 # Set the environment variable for X11 via Xming on Windows WSL
