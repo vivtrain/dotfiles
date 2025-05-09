@@ -34,7 +34,7 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "<49>\uf007 {{ .UserName }}</> <d><#73a7a7>in</></d> ",
+          "template": "<49>\uf007 {{ .UserName }}</> <#73a7a7>in</> ",
           "type": "session",
           "style": "plain"
         },
@@ -55,7 +55,7 @@
             "fetch_status": true,
             "fetch_upstream_icon": true
           },
-          "template": "<#73a7a7>::</> {{ .UpstreamIcon }} {{ .HEAD }}{{ if .Staging.Changed }}<22> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} <#73a7a7>|{{ end }}{{ if .Working.Changed }}<203> \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
+          "template": "<#73a7a7>::</> {{ .UpstreamIcon }} {{ .HEAD }}{{ if .Staging.Changed }}<#50a14c> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} <#73a7a7>|{{ end }}{{ if .Working.Changed }}<203> \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
           "foreground": "198",
           "type": "git",
           "style": "diamond"
@@ -64,7 +64,7 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "<d>[{{ .CurrentDate | date .Format }}]</d>",
+          "template": "[{{ .CurrentDate | date .Format }}]",
           "foreground": "#73a7a7",
           "type": "time",
           "style": "plain"

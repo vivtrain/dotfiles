@@ -17,9 +17,9 @@ esac
 if [ -z "$TMUX" ]; then
     export PATH="\
 /opt/nvim-linux64/bin:\
-/home/k99vivek/.local/bin:\
-/home/k99vivek/misc/scripts/:\
-/home/k99vivek/.nvm/versions/node/v20.17.0/bin/:\
+/home/vivtrain/.local/bin/:\
+/home/vivtrain/misc/scripts/:\
+/home/vivtrain/.nvm/versions/node/v20.17.0/bin/:\
 $PATH"
 fi
 
@@ -70,7 +70,6 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    export TERM=xterm-256color
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -169,7 +168,7 @@ load_nvm() {
 }
 
 # pnpm
-export PNPM_HOME="/home/k99vivek/.local/share/pnpm"
+export PNPM_HOME="/home/vivtrain/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
