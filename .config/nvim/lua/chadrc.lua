@@ -11,6 +11,10 @@ options.base46 = {
 	  Normal = { bg = "NONE" },
     CursorLine = { bg = "#101010" },
     CmpPmenu = { bg = "#202020" },
+    NvDashFooter = { fg = "#afd7af"},
+    LineNr = { fg = "#808080" },
+    CursorLineNr = { fg = "#FFFFFF" },
+    Comment = { fg = "#808080" },
   },
 }
 

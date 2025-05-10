@@ -20,5 +20,7 @@ options.clipboard = ""
 -- Set a marker for keeping lines under 80 characters
 options.colorcolumn = "81"
 -- Enable CursorLine
-options.cursorlineopt = 'both'
+-- options.cursorlineopt = 'both'
+
+vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })
 
