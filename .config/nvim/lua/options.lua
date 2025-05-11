@@ -43,3 +43,6 @@ vim.api.nvim_create_autocmd({'BufWinEnter'}, {
   pattern = '*',
   command = 'silent! normal! g`"zv',
 })
+
+vim.fn.sign_define("DapBreakpoint", {text='', texthl='DapBreakpoint', linehl='', numhl=''});
+

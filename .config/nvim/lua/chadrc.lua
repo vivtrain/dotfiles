@@ -12,39 +12,46 @@ options.base46 = {
     CursorLine = { bg = "#101010" },
     LineNr = { fg = "#808080" },
     CursorLineNr = { fg = "white" },
+    WinSeparator = { fg = "light_grey" },
     Comment = { fg = "#808080" },
     CmpPmenu = { bg = "#202020" },
     NvDashFooter = { fg = "green" },
     NvimTreeRootFolder = { fg = "purple" },
     NvDashAscii = { fg = "nord_blue" },
     NvDashButtons = { fg = "purple" },
+    Visual = { bg = "grey" },
   },
+  hl_add = {
+    DapBreakpoint = { fg = "red" },
+    MarkSignHL = { fg = "cyan" },
+    MarkSignNumHL = { fg = "cyan" },
+  }
 }
 
 options.ui = {
   statusline = { separator_style = "default" },
   tabufline = { lazyload = false },
-  nvdash = { load_on_startup = true, }
+  nvdash = { load_on_startup = true, },
 }
 
 options.nvdash = {
   load_on_startup = true,
   header = {
-    "                            ",
-    "     ▄▄         ▄ ▄▄▄▄▄▄▄   ",
-    "   ▄▀███▄     ▄██ █████▀    ",
-    "   ██▄▀███▄   ███           ",
-    "   ███  ▀███▄ ███           ",
-    "   ███    ▀██ ███           ",
-    "   ███      ▀ ███           ",
-    "   ▀██ █████▄▀█▀▄██████▄    ",
-    "     ▀ ▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀   ",
-    "                            ",
-    " █▄ █ █ █   ▄▀▀ █▄█ ▄▀▄ █▀▄ ",
-    " █ ▀█ ▀▄▀   ▀▄▄ █ █ █▀█ █▄▀ ",
-    "                            ",
-    "    ᴩᴏᴡᴇʀᴇᴅ ʙy  𝗇𝖾𝗈𝗏𝗂𝗆    ",
-    "                            ",
+    "                                                      ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡴⡢⡶⠶⢢⢄⠀⠀⠀⠀                              ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢾⣾⣟⠝⠀  ⢹⡏⠀⠀⠀     ▄▄         ▄ ▄▄▄▄▄▄▄▄▄   ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣻⡇⠘⠿⢾⢐⣶⠃⠀⠀⠀   ▄▀███▄     ▄██ ███████▀    ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣱⣾⣷⣦⣠⡾⣃⡐⠀⠀⠀⠀   ██▄▀███▄   ███             ",
+    "⠀⠀⠀⠀⠀⣀⡀⣀⣀⣤⣤⣠⡟⢻⣿⣿⣏⠻⡿⠀⠀⠀⠀⠀   ███  ▀███▄ ███             ",
+    "⠀⣠⡾⢿⡿⠿⠿⢿⣻⣿⡋⠉⡇⠀⣿⠛⠻⠿⢇⠀⠀⠀⠀⠀   ███    ▀██ ███             ",
+    "⣸⠋⠀⣿⠀⠀⠀⠀⠈⠙⢷⠀⢰⣰⠃⡠⢔⠄⠀⠀⢄⠀⠀⠀   ███      ▀ ███             ",
+    "⢻⡄⠀⠛⢆⠀⠀⠀⠀⠀⠈⢿⣿⣿⠞⠛⠉⠁⠉⠢⡀⠑⢀⠀   ▀██ ▄████▄▀█▀▄████████▄    ",
+    "⠀⢻⢀⢿⣷⠀⠀⠀⠀ ⠀⢸⡟⠀⠀⠀⠀⠀⠀⠀⠈⠆⠀⠡     ▀ ▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀▀▀   ",
+    "  ⠀⠀⢻⣿⣄⡀⠀⢀⣾⡏⠀⠀⠀⠀  ⠀⢀⢰⡴⠀⠘⠀                             ",
+    "⠀⠀⠀⠀⠀⣿⡝⣻⣿⣿⣿⣿⣦⣄⡀  ⠀⢔⡵⡟⡇⠱⠈⡄  █▄ █ █ █  ▄▀▀ █▄█ ▄▀▄ █▀▄  ",
+    "⠀⠀⠀⠀⠀⣾⣹⡯⠤⢄⣏⣀⡈⣹⡟⡩⢋⢼⡄⢹⠀⠀⠌⠀⠇  █ ▀█ ▀▄▀  ▀▄▄ █ █ █▀█ █▄▀  ",
+    "      ᴩᴏᴡᴇʀᴇᴅ ʙy  𝗇𝖾𝗈                               ",
+    "                                                      ",
   },
 }
 
