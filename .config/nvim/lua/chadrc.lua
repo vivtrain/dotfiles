@@ -10,11 +10,14 @@ options.base46 = {
 	hl_override = {
 	  Normal = { bg = "NONE" },
     CursorLine = { bg = "#101010" },
-    CmpPmenu = { bg = "#202020" },
-    NvDashFooter = { fg = "#afd7af"},
     LineNr = { fg = "#808080" },
-    CursorLineNr = { fg = "#FFFFFF" },
+    CursorLineNr = { fg = "white" },
     Comment = { fg = "#808080" },
+    CmpPmenu = { bg = "#202020" },
+    NvDashFooter = { fg = "green" },
+    NvimTreeRootFolder = { fg = "purple" },
+    NvDashAscii = { fg = "nord_blue" },
+    NvDashButtons = { fg = "purple" },
   },
 }
 
@@ -40,7 +43,7 @@ options.nvdash = {
     " █▄ █ █ █   ▄▀▀ █▄█ ▄▀▄ █▀▄ ",
     " █ ▀█ ▀▄▀   ▀▄▄ █ █ █▀█ █▄▀ ",
     "                            ",
-    "    ᴩᴏᴡᴇʀᴇᴅ ʙy   𝗇𝖾𝗈𝗏𝗂𝗆    ",
+    "    ᴩᴏᴡᴇʀᴇᴅ ʙy  𝗇𝖾𝗈𝗏𝗂𝗆    ",
     "                            ",
   },
 }

@@ -22,5 +22,12 @@ options.colorcolumn = "81"
 -- Enable CursorLine
 -- options.cursorlineopt = 'both'
 
-vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })
+vim.api.nvim_set_hl(0, "@comment.lua", { link = "Comment" })
+
+vim.api.nvim_create_autocmd({
+  "VimEnter" },
+  { callback = function()
+    require("nvim-tree.api").tree.open()
+  end,
+})
 
