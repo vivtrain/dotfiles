@@ -18,6 +18,7 @@ map("n", "<c-space>", "<cmd> lua vim.diagnostic.open_float() <cr>", { desc = "Op
 map("n", "<c-n>", "<cmd> NvimTreeFocus <cr>", { desc = "NvimTree open or jump to explorer" })
 map("n", "U", "<c-r>", { desc = "Redo" })
 map("n", "<F2>", "<cmd> lua require 'nvchad.lsp.renamer'() <cr>", { desc = "LSP Rename variable "})
+map("n", "<c-f>", "<cmd> NvimTreeFindFile <cr>", { desc = "NvimTree show in explorer "})
 
 local cmp = require("cmp")
 cmp.setup({
