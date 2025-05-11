@@ -26,9 +26,13 @@ o.matchpairs = '[:],(:),{:},<:>'
 vim.api.nvim_set_hl(0, "@comment.lua", { link = "Comment" })
 
 vim.api.nvim_create_autocmd({ "VimEnter" }, {
-  desc = "Open nvim-tree on startup if a buffer is opened (i.e. no NvDash)",
+  desc = "Open nvim-tree on startup",
   callback = function()
-    if vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()):len() > 0 then
+    local bufName = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+    local baseName = vim.fs.basename(bufName)
+    -- Do not open if empty buffer (i.e. NvDash should show)
+    -- or if doing a commit message
+    if bufName:len() > 0 and baseName ~= "COMMIT_EDITMSG" then
       require("nvim-tree.api").tree.toggle({ find_file = true, focus = false, })
     end
   end,
