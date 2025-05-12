@@ -1,7 +1,10 @@
 require "nvchad.mappings"
 
 local map = vim.keymap.set
---local unmap = vim.keymap.del
+local unmap = vim.keymap.del
+
+unmap("n", "<leader>ch")
+map("n", "<leader>ch", "<cmd> NvimTreeClose <cr><cmd> NvCheatsheet <cr>")
 
 map("i", "jk", "<esc>", { desc = "Exit insert mode" })
 map("i", "kj", "<esc>", { desc = "Exit insert mode" })
@@ -35,11 +38,17 @@ map("n", "<leader>ca", "<cmd> lua vim.lsp.buf.code_action() <cr>", { desc = "LSP
 map("n", "<leader>db", "<cmd> DapToggleBreakpoint <cr>", { desc = "DAP Toggle Breakpoint" })
 map("n", "<leader>dn", "<cmd> NvimTreeClose <cr><cmd> DapNew <cr>", { desc = "DAP New session" })
 map("n", "<leader>dd", "<cmd> DapDisconnect <cr>", { desc = "DAP DapDisconnect" })
-map("n", "<F7>", "<cmd> DapStepOut <cr>", { desc = "DAP DapDisconnect" })
-map("n", "<F8>", "<cmd> DapStepInto <cr>", { desc = "DAP DapDisconnect" })
-map("n", "<F9>", "<cmd> DapStepOver <cr>", { desc = "DAP DapDisconnect" })
+map("n", "<F7>", "<cmd> DapStepOut <cr>", { desc = "DAP Step out" })
+map("n", "<F8>", "<cmd> DapStepInto <cr>", { desc = "DAP Step into" })
+map("n", "<F9>", "<cmd> DapStepOver <cr>", { desc = "DAP Step over" })
 map("n", "<F10>", "<cmd> DapContinue <cr>", { desc = "DAP Continue" })
 
 map("n", "ZZ", "<cmd> :wqa <cr>", { desc = "Exit Quit Neovim after saving" })
 map("n", "ZX", "<cmd> :qa! <cr>", { desc = "Exit Quit Neovim without saving" })
+
+map("n", "<leader>tt", "<cmd> Telescope builtin <cr>", { desc = "Telescope Builtins" })
+map("n", "<leader>th", "<cmd> Telescope highlights <cr>", { desc = "Telescope Highlights" })
+map("n", "<leader>tr", "<cmd> Telescope registers <cr>", { desc = "Telescope Registers" })
+unmap("n", "<leader>fz")
+map("n", "<leader>tf", "<cmd> Telescope current_buffer_fuzzy_find <cr>", { desc = "Telescope Fuzzy find in current buffer" })
 
