@@ -45,7 +45,7 @@ alias mkr='make && echo "" && ./run'
 alias mkc='make clean'
 alias vs='vim -S'
 alias chrome='google-chrome-stable &> /dev/null & disown'
-alias CUR_DIR='basename $PWD'
+alias cwd='basename $PWD'
 alias omp='oh-my-posh'
 
 
