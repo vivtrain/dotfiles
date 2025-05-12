@@ -26,6 +26,7 @@ map("n", "^", "<home>", { desc = "Jump to beginning of line" })
 map("n", "Y", "y$", { desc = "Yank to end of line" })
 map("n", "U", "<c-r>", { desc = "Redo" })
 map("n", "Q", "@@", { desc = "Repeat most recent macro" })
+map("n", "<leader>cd", "<cmd cd %:h <cr>", { desc = "Directory Change Nvim working directory to that of current buffer" })
 
 map("n", "<c-n>", "<cmd> NvimTreeFocus <cr>", { desc = "NvimTree open or jump to explorer" })
 map("n", "<c-f>", "<cmd> NvimTreeFindFile <cr>", { desc = "NvimTree show in explorer "})

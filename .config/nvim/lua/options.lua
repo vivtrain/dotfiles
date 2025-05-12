@@ -1,7 +1,11 @@
 require "nvchad.options"
 
+local o = vim.o
+local g = vim.g
+local api = vim.api
+
 -- Setup WSL clipboard
-vim.g.clipboard = {
+g.clipboard = {
   name = "clip-wsl",
   copy = {
     ["+"] = "clip.exe",
@@ -13,21 +17,18 @@ vim.g.clipboard = {
   },
   cache_enabled = true,
 }
+g.python_recommended_style = 0;
 
-local o = vim.o
--- Do not share unnamed register with system clipboard
 o.clipboard = ""
--- Set a marker for keeping lines under 80 characters
 o.colorcolumn = "81"
--- Enable CursorLine
--- options.cursorlineopt = 'both'
 o.matchpairs = '[:],(:),{:},<:>'
 
-vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })
-vim.api.nvim_set_hl(0, "@comment.lua", { link = "Comment" })
-vim.api.nvim_set_hl(0, "@comment.bash", { link = "Comment" })
+api.nvim_set_hl(0, "@comment", { link = "Comment" })
+api.nvim_set_hl(0, "@comment.lua", { link = "Comment" })
+api.nvim_set_hl(0, "@comment.bash", { link = "Comment" })
+vim.fn.sign_define("DapBreakpoint", {text='', texthl='DapBreakpoint', linehl='', numhl=''});
 
-vim.api.nvim_create_autocmd({ "VimEnter" }, {
+api.nvim_create_autocmd({ "VimEnter" }, {
   desc = "Open nvim-tree on startup",
   callback = function()
     local bufName = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
@@ -40,11 +41,9 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
   end,
 })
 
-vim.api.nvim_create_autocmd({'BufWinEnter'}, {
+api.nvim_create_autocmd({'BufWinEnter'}, {
   desc = 'Return cursor to where it was last time closing the file',
   pattern = '*',
   command = 'silent! normal! g`"zv',
 })
-
-vim.fn.sign_define("DapBreakpoint", {text='', texthl='DapBreakpoint', linehl='', numhl=''});
 
