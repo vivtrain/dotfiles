@@ -62,6 +62,11 @@ alias prod='git switch production'
 alias dev='git switch development'
 
 
+# # Windows Clipboard Access
+alias clip='clip.exe'
+alias paste='powershell.exe Get-Clipboard'
+
+
 # # Colors and highlights
 export        NO_COLOR='\e[0m'
 export           BLACK='\e[30m'
@@ -104,13 +109,8 @@ export        BG_WHITE='\e[30;107m'
 # underline: \e[4;${COLOR_CODE}m
 
 function color {
-    echo -ne $1
-    ${@:2}
-    echo -ne $NO_COLOR
+  echo -ne $1
+  ${@:2}
+  echo -ne $NO_COLOR
 }
-
-
-# # Windows Clipboard Access
-alias clip='clip.exe'
-alias paste='powershell.exe Get-Clipboard'
 
