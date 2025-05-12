@@ -137,14 +137,6 @@ fi
 # Add an "alert" alias for long running commands.
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Start tmux by default if available
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-  tmux new-session -s tmux -e "WELCOMED=0"
-elif command -v tmux &> /dev/null && [ `tmux show-environment WELCOMED | sed 's/[[:alnum:]]*=//'` -eq 0 ]; then
-  source .welcome.sh
-  tmux set-environment WELCOMED 1 
-fi
-
 # Set the environment variable for X11 via Xming on Windows WSL
 if [ -n $(uname -r | grep -i microsoft) ]; then
   export DISPLAY=$(awk '/nameserver/ {print $2}' < /etc/resolv.conf):0.0
@@ -177,4 +169,12 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# Start tmux by default if available
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+  tmux new-session -s tmux
+elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /dev/null` ]; then
+  welcome
+  tmux set-environment WELCOMED 1
+fi
 
