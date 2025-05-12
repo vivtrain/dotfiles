@@ -51,4 +51,5 @@ map("n", "<leader>th", "<cmd> Telescope highlights <cr>", { desc = "Telescope Hi
 map("n", "<leader>tr", "<cmd> Telescope registers <cr>", { desc = "Telescope Registers" })
 unmap("n", "<leader>fz")
 map("n", "<leader>tf", "<cmd> Telescope current_buffer_fuzzy_find <cr>", { desc = "Telescope Fuzzy find in current buffer" })
+map("n", "<leader>fg", "<cmd> Telescope git_files <cr>", { desc = "Telescope Find files in current git repo" })
 
