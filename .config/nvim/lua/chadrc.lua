@@ -6,20 +6,31 @@
 local options = {}
 
 options.base46 = {
+  changed_themes = {
+    catppuccin = {
+      base_30 = {
+        red = "#F38ba8",
+        light_grey = "#808090",
+        grey = "#505060",
+        black = "#202025",
+        darker_black = "#16161A",
+      }
+    }
+  },
 	theme = "catppuccin",
 	hl_override = {
 	  Normal = { bg = "NONE" },
-    CursorLine = { bg = "#101010" },
-    LineNr = { fg = "#808080" },
+    LineNr = { fg = "light_grey" },
     CursorLineNr = { fg = "white" },
     WinSeparator = { fg = "light_grey" },
-    Comment = { fg = "#808080" },
-    CmpPmenu = { bg = "#202020" },
+    Comment = { fg = "light_grey" },
+    CmpPmenu = { bg = "darker_black" },
+    CmpBorder = { fg = "grey", bg = "darker_black" },
     NvDashFooter = { fg = "green" },
     NvimTreeRootFolder = { fg = "purple" },
-    NvDashAscii = { fg = "nord_blue" },
+    NvDashAscii = { fg = "blue" },
     NvDashButtons = { fg = "purple" },
-    Visual = { bg = "grey" },
+    Visual = { bg = { "grey", 1 } },
   },
   hl_add = {
     DapBreakpoint = { fg = "red" },

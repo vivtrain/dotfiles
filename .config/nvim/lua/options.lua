@@ -23,7 +23,9 @@ o.colorcolumn = "81"
 -- options.cursorlineopt = 'both'
 o.matchpairs = '[:],(:),{:},<:>'
 
+vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })
 vim.api.nvim_set_hl(0, "@comment.lua", { link = "Comment" })
+vim.api.nvim_set_hl(0, "@comment.bash", { link = "Comment" })
 
 vim.api.nvim_create_autocmd({ "VimEnter" }, {
   desc = "Open nvim-tree on startup",
