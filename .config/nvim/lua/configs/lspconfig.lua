@@ -11,32 +11,6 @@ local nvlsp = require "nvchad.configs.lspconfig"
 --   capabilities = nvlsp.capabilities,
 -- }
 
--- Lua language server configuration
-lspconfig.lua_ls.setup {
-  on_attach = nvlsp.on_attach,
-  on_init = nvlsp.on_init,
-  capabilities = nvlsp.capabilities,
-  cmd = { "lua-language-server" },
-  filetypes = { "lua" },
-  root_dir = lspconfig.util.root_pattern(
-    "~/.local/share/nvim/lazy/nvim-lspconfig/.luarc.json",
-    "~/.local/share/nvim/lazy/nvim-lspconfig/.luarc.jsonc",
-    "~/.local/share/nvim/lazy/nvim-lspconfig/.luacheckrc",
-    "~/.local/share/nvim/lazy/nvim-lspconfig/.stylua.toml",
-    "~/.local/share/nvim/lazy/nvim-lspconfig/stylua.toml",
-    "~/.local/share/nvim/lazy/nvim-lspconfig/selene.toml",
-    "~/.local/share/nvim/lazy/nvim-lspconfig/selene.yml",
-    "~/.local/share/nvim/lazy/nvim-lspconfig/.git"),
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { 'vim' },
-      },
-    },
-  },
-  single_file_support = true, -- Support for single Lua files
-}
-
 lspconfig.pyright.setup({
   on_init = nvlsp.on_init,
   on_attach = nvlsp.on_attach,

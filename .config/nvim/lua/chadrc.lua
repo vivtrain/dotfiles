@@ -3,9 +3,9 @@
 -- Please read that file to know all available options :( 
 
 ---@type ChadrcConfig
-local options = {}
+local config = {}
 
-options.base46 = {
+config.base46 = {
   changed_themes = {
     catppuccin = {
       base_30 = {
@@ -39,13 +39,21 @@ options.base46 = {
   }
 }
 
-options.ui = {
+config.ui = {
   statusline = { separator_style = "default" },
   tabufline = { lazyload = false },
   nvdash = { load_on_startup = true, },
+  renamer = {
+    border = "rounded",
+    border_hl_group = "FloatBorder",
+    mode = "normal",
+    title = "Rename Symbol",
+    title_hl_group = "@comment.note",
+    show_original = true,
+  }
 }
 
-options.nvdash = {
+config.nvdash = {
   load_on_startup = true,
   header = {
     "                                                      ",
@@ -66,10 +74,10 @@ options.nvdash = {
   },
 }
 
-options.term = {
+config.term = {
   base46_colors = false,
   float = { border = "double" },
 }
 
-return options
+return config
 
