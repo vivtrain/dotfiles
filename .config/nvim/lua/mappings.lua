@@ -26,15 +26,27 @@ map("n", "^", "<home>", { desc = "Jump to beginning of line" })
 map("n", "Y", "y$", { desc = "Yank to end of line" })
 map("n", "U", "<c-r>", { desc = "Redo" })
 map("n", "Q", "@@", { desc = "Repeat most recent macro" })
-map("n", "<leader>cd", "<cmd cd %:h <cr>", { desc = "Directory Change Nvim working directory to that of current buffer" })
+map("n", "<leader>cd", "<cmd> cd %:h <cr>", { desc = "Directory Change Nvim working directory to that of current buffer" })
 
 map("n", "<c-n>", "<cmd> NvimTreeFocus <cr>", { desc = "NvimTree open or jump to explorer" })
 map("n", "<c-f>", "<cmd> NvimTreeFindFile <cr>", { desc = "NvimTree show in explorer "})
 
-map("n", "<c-space>", "<cmd> lua vim.diagnostic.open_float() <cr>", { desc = "LSP Open float window" })
-map("n", "<F2>", "<cmd> lua require 'nvchad.lsp.renamer'() <cr>", { desc = "LSP Rename variable " })
-map("n", "<leader>l", "<cmd> LspStop <cr><cmd> LspStart <cr>", { desc = "LSP Restart" })
-map("n", "<leader>ca", "<cmd> lua vim.lsp.buf.code_action() <cr>", { desc = "LSP Code action" })
+map("n", "<c-space>", vim.diagnostic.open_float, { desc = "LSP Open float window" })
+local function rename()
+  require('nvchad.lsp.renamer')({
+    border = "rounded",
+    border_hl_group = "FloatBorder",
+    right_padding = 15,
+    title = "rename symbol",
+    title_hl_group = "@comment.note",
+    mode = "normal",
+    show_original = true,
+  })
+end
+map("n", "<F2>", rename, { desc = "LSP Rename variable" })
+map("n", "<leader>ra", rename, { desc = "LSP Rename variable" })
+map("n", "<leader>l", "<cmd> LspRestart <cr>", { desc = "LSP Restart" })
+map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP Code action" })
 
 map("n", "<leader>db", "<cmd> DapToggleBreakpoint <cr>", { desc = "DAP Toggle Breakpoint" })
 map("n", "<leader>dn", "<cmd> NvimTreeClose <cr><cmd> DapNew <cr>", { desc = "DAP New session" })
