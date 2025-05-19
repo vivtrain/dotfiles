@@ -20,6 +20,21 @@ local function custom_nv_defaults()
     end, opts "List workspace folders")
 
     map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
+    map("n", "<c-space>", vim.diagnostic.open_float, opts "LSP Open float window")
+    local function rename()
+      require('nvchad.lsp.renamer')({
+        border = "rounded",
+        border_hl_group = "FloatBorder",
+        right_padding = 15,
+        title = "rename symbol",
+        title_hl_group = "@comment.note",
+        mode = "normal",
+        show_original = true,
+      })
+    end
+    map("n", "<F2>", rename, opts "LSP Rename variable")
+    map("n", "<leader>ra", rename, opts "LSP Rename variable")
+    map("n", "<leader>ca", vim.lsp.buf.code_action, opts "LSP Code action")
   end
 
   vim.api.nvim_create_autocmd("LspAttach", {
@@ -59,23 +74,14 @@ end
 custom_nv_defaults()
 
 lspconfig.pyright.setup({
-  on_init = nvlsp.on_init,
-  on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.capabilities,
   filetypes = { "python" },
 })
 
 lspconfig.clangd.setup({
-  on_init = nvlsp.on_init,
-  on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.capabilities,
   filetypes = { "cpp", "c", "cc", "h", "tpp", "mpp" },
 })
 
 lspconfig.ts_ls.setup({
-  on_init = nvlsp.on_init,
-  on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.capabilities,
   filetypes = {
     "javascript",
     "javascriptreact",
@@ -85,9 +91,6 @@ lspconfig.ts_ls.setup({
 })
 
 lspconfig.tailwindcss.setup({
-  on_init = nvlsp.on_init,
-  on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.capabilities,
   filetypes = {
     "javascript",
     "javascriptreact",
@@ -97,9 +100,6 @@ lspconfig.tailwindcss.setup({
 })
 
 lspconfig.eslint.setup({
-  on_init = nvlsp.on_init,
-  on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.capabilities,
   filetypes = {
     "javascript",
     "javascriptreact",
@@ -109,8 +109,5 @@ lspconfig.eslint.setup({
 })
 
 lspconfig.cssls.setup({
-  on_init = nvlsp.on_init,
-  on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.capabilities,
 })
 
