@@ -17,6 +17,7 @@ map("n", "+", "<c-w>+", opts "Window Adjust split height up")
 map("n", "_", "<c-w>-", opts "Window Adjust split height down")
 map("n", "]]", "<cmd> vert res -1 <cr>", opts "Window Adjust split width right")
 map("n", "[[", "<cmd> vert res +1 <cr>", opts "Window Adjust split width left")
+map("n", "&", "<cmd> && <cr>", opts "Repeat Last substitute")
 
 map({"t","n"}, "<c-p>", "<cmd> wincmd p <cr>", opts "Terminal Return to editor buffer")
 map("t", "<c-h>", "<cmd> wincmd h <cr>", opts "Terminal Move to left window")
