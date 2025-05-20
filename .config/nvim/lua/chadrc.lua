@@ -14,7 +14,7 @@ config.base46 = {
         grey = "#505060",
         black = "#202025",
         darker_black = "#16161A",
-      }
+      },
     }
   },
 	theme = "catppuccin",
