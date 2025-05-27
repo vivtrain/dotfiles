@@ -28,8 +28,8 @@ local function custom_nv_defaults()
         right_padding = 15,
         title = "rename symbol",
         title_hl_group = "@comment.note",
-        mode = "normal",
         show_original = true,
+        allow_normal = true,
       })
     end
     map("n", "<F2>", rename, opts "LSP Rename variable")
