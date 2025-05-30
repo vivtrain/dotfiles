@@ -50,7 +50,7 @@ api.nvim_create_autocmd({'BufWinEnter'}, {
 })
 api.nvim_create_autocmd({'CmdwinEnter'}, {
   desc = 'Exit cmd window using <esc>',
-  command = 'nmap <esc> :q<cr>',
+  command = 'nmap <buffer> <esc> :q<cr>',
 })
 api.nvim_create_autocmd({'WinEnter','BufWinEnter'}, {
   desc = 'Always be in insert mode when entering a terminal window',
