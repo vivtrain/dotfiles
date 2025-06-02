@@ -25,7 +25,10 @@ o.matchpairs = '[:],(:),{:},<:>'
 -- Override Treesitter/Base46 colorschemes
 vim.schedule(function ()
   api.nvim_set_hl(0, "@comment", { link = "Comment" })
+  api.nvim_set_hl(0, "@lsp.type.operator.cpp", {}) -- disable this
 end)
+-- Lower semantic token highlight priorities
+-- vim.highlight.priorities.semantic_tokens = 75
 
 vim.fn.sign_define("DapBreakpoint", {text='', texthl='DapBreakpoint', linehl='', numhl=''});
 
