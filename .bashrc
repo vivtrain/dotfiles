@@ -69,16 +69,9 @@ else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
-# Set custom terminal capabilities (termcap) for less and man
+# Set custom capabilities man
 if [ "$color_prompt" = yes ]; then
-  export LESS_TERMCAP_mb=$'\e[94m'     # mode blink
-  export LESS_TERMCAP_md=$'\e[94m'     # mode bold
-  export LESS_TERMCAP_me=$'\e[0m'      # mode end
-  export LESS_TERMCAP_so=$'\e[30;103m' # standout
-  export LESS_TERMCAP_se=$'\e[0m'      # standout end
-  export LESS_TERMCAP_us=$'\e[32m'     # underline start
-  export LESS_TERMCAP_ue=$'\e[0m'      # underline end
-  export MANPAGER="less -R --use-color"
+  export MANPAGER="less -R --use-color -DSkY -DEwr"
 fi
 
 unset color_prompt force_color_prompt

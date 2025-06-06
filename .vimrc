@@ -36,12 +36,12 @@ if !has('nvim')
 endif
 
 " Vim Native Package Manager""""""""""""""""""""""""""""""""""""""""""""""""""""
-if !has('nvim')
-  packadd YouCompleteMe
-  let g:ycm_global_ycm_extra_conf = '/home/k99vivek/.vim/pack/YouCompleteMe/opt/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
-  let g:ycm_confirm_extra_conf = 0
-  let g:python_highlight_all = 1
-endif
+"if !has('nvim')
+"  packadd YouCompleteMe
+"  let g:ycm_global_ycm_extra_conf = '/home/k99vivek/.vim/pack/YouCompleteMe/opt/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
+"  let g:ycm_confirm_extra_conf = 0
+"  let g:python_highlight_all = 1
+"endif
 
 " Formatting""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Tabbing
@@ -182,7 +182,7 @@ hi Function ctermfg=123
 
 " Line number options
 set number              " Show line numbers
-set relativenumber      " Set line numbers relative to current
+set norelativenumber    " Unset line numbers relative to current
 set numberwidth=3       " Make room for a three digit line number
 
 " Highlight extra whitespace
