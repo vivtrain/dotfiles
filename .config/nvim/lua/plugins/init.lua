@@ -66,10 +66,33 @@ return {
 
   {
     "hrsh7th/nvim-cmp",
+    event = { "InsertEnter", "CmdlineEnter" },
     opts = function(_, opts)
       local cmp = require("cmp")
       opts.preselect = cmp.PreselectMode.None
       opts.completion = { completeopt = "menu,menuone,noinsert,noselect" }
+      local function customAbort(callback)
+        if cmp.core.view:visible() then
+          vim.fn.execute('call feedkeys("\\<Esc>")')
+        end
+        return cmp.mapping.abort()(callback)
+      end
+      local customMapping = {
+        ["<CR>"] = cmp.mapping({
+          i = function(fallback)
+            if cmp.visible() and cmp.get_active_entry() then
+              cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+            else
+              fallback()
+            end
+          end,
+          s = cmp.mapping.confirm({ select = true }),
+          c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+        }),
+        ["<Esc>"] = customAbort,
+      }
+      opts.mapping = vim.tbl_deep_extend('force', opts.mapping or {}, customMapping)
+      return opts
     end,
   },
 
