@@ -25,8 +25,8 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "\u256d\u2500 ",
-          "foreground": "#c9cccd",
+          "template": "╭─",
+          "foreground": "15",
           "type": "text",
           "style": "plain"
         },
@@ -34,7 +34,7 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "<49>\uf007 {{ .UserName }}</> <#73a7a7>in</> ",
+          "template": "<49> {{ .UserName }}</> <#73a7a7>in</> ",
           "type": "session",
           "style": "plain"
         },
@@ -44,6 +44,7 @@
             "style": "full"
           },
           "template": "\ue5ff {{ .Path }} ",
+          "template": "{{if .Segments.Git.Ref}}\udb80\udea2 {{.Segments.Git.RepoName}}{{.Path | replace .Segments.Git.Dir \"\"}}{{else}}\ue5ff {{.Path}}{{end}} ",
           "foreground": "12",
           "type": "path",
           "style": "plain"
@@ -53,9 +54,10 @@
             "cache_duration": "none",
             "fetch_stash_count": true,
             "fetch_status": true,
-            "fetch_upstream_icon": true
+            "fetch_upstream_icon": true,
+            "branch_icon": "\uf418 "
           },
-          "template": "<#73a7a7>::</> {{ .UpstreamIcon }} {{ .HEAD }}{{ if .Staging.Changed }}<#50a14c> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} <#73a7a7>|{{ end }}{{ if .Working.Changed }}<203> \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
+          "template": "<#73a7a7>of </>{{ .HEAD }}{{ if gt .StashCount 0 }}<#97bfbc>  {{ .StashCount }}</>{{ end }}{{ if gt .Behind 0 }}<#ff4a4a>  {{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<#f5d142>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<#91e031>  {{ .Staging.String }}</>{{ end }}{{ if gt .Ahead 0 }}<#029c4f>  {{ .Ahead }}</>{{ end }}",
           "foreground": "198",
           "type": "git",
           "style": "diamond"
@@ -63,9 +65,9 @@
         {
           "properties": {
             "cache_duration": "none",
-            "time_format": " Mon | 01/02 | 3:04:05 pm "
+            "time_format": "<#00ffff>\uf017 3:04:05 pm</> on <#00aaaa>\uf073 Mon 01/02</>"
           },
-          "template": "[{{ .CurrentDate | date .Format }}]",
+          "template": "\n<15>│</>    at {{ .CurrentDate | date .Format }}",
           "foreground": "#73a7a7",
           "type": "time",
           "style": "plain"
@@ -81,28 +83,13 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "\u2570\u2500",
-          "foreground": "#c9cccd",
+          "template": "╰󰋇",
+          "foreground": "15",
           "type": "text",
           "style": "plain"
         }
       ],
       "newline": true
-    },
-    {
-      "type": "prompt",
-      "alignment": "left",
-      "segments": [
-        {
-          "properties": {
-            "cache_duration": "none"
-          },
-          "template": "\ue0b0 ",
-          "foreground": "255",
-          "type": "text",
-          "style": "plain"
-        }
-      ]
     }
   ],
   "version": 3,
