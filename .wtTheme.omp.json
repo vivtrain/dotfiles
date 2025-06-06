@@ -7,22 +7,6 @@
       "segments": [
         {
           "properties": {
-            "cache_duration": "none",
-            "fetch_version": false
-          },
-          "template": "({{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }})",
-          "foreground": "white",
-          "type": "python",
-          "style": "plain"
-        }
-      ]
-    },
-    {
-      "type": "prompt",
-      "alignment": "left",
-      "segments": [
-        {
-          "properties": {
             "cache_duration": "none"
           },
           "template": "╭─",
@@ -43,8 +27,7 @@
             "cache_duration": "none",
             "style": "full"
           },
-          "template": "\ue5ff {{ .Path }} ",
-          "template": "{{if .Segments.Git.Ref}}\udb80\udea2 {{.Segments.Git.RepoName}}{{.Path | replace .Segments.Git.Dir \"\"}}{{else}}\ue5ff {{.Path}}{{end}} ",
+          "template": "{{if .Segments.Git.Ref}}󰊢 {{.Segments.Git.RepoName}}{{.Path | replace .Segments.Git.Dir \"\"}}{{else}} {{.Path}}{{end}} ",
           "foreground": "12",
           "type": "path",
           "style": "plain"
@@ -55,7 +38,7 @@
             "fetch_stash_count": true,
             "fetch_status": true,
             "fetch_upstream_icon": true,
-            "branch_icon": "\uf418 "
+            "branch_icon": " "
           },
           "template": "<#73a7a7>of </>{{ .HEAD }}{{ if gt .StashCount 0 }}<#97bfbc>  {{ .StashCount }}</>{{ end }}{{ if gt .Behind 0 }}<#ff4a4a>  {{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<#f5d142>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<#91e031>  {{ .Staging.String }}</>{{ end }}{{ if gt .Ahead 0 }}<#029c4f>  {{ .Ahead }}</>{{ end }}",
           "foreground": "198",
@@ -65,7 +48,7 @@
         {
           "properties": {
             "cache_duration": "none",
-            "time_format": "<#00ffff>\uf017 3:04:05 pm</> on <#00aaaa>\uf073 Mon 01/02</>"
+            "time_format": "<#00ffff> 3:04:05 pm</> on <#00aaaa> Mon 01/02</>"
           },
           "template": "\n<15>│</>    at {{ .CurrentDate | date .Format }}",
           "foreground": "#73a7a7",
