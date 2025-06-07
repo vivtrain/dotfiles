@@ -72,9 +72,7 @@ return {
       opts.preselect = cmp.PreselectMode.None
       opts.completion = { completeopt = "menu,menuone,noinsert,noselect" }
       local function customAbort(callback)
-        if cmp.core.view:visible() then
-          vim.fn.execute('call feedkeys("\\<Esc>")')
-        end
+        vim.fn.execute('call feedkeys("\\<Esc>")')
         return cmp.mapping.abort()(callback)
       end
       local customMapping = {
