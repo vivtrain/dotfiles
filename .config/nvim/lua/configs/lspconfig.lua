@@ -5,6 +5,7 @@ local function custom_nv_defaults()
   dofile(vim.g.base46_cache .. "lsp")
   require("nvchad.lsp").diagnostic_config()
   local map = vim.keymap.set
+  local unmap = vim.keymap.del
   local on_attach = function(_, bufnr)
     local function opts(desc)
       return { buffer = bufnr, desc = "LSP " .. desc }
@@ -35,6 +36,7 @@ local function custom_nv_defaults()
     map("n", "<F2>", rename, opts "LSP Rename variable")
     map("n", "<leader>ra", rename, opts "LSP Rename variable")
     map("n", "<leader>ca", vim.lsp.buf.code_action, opts "LSP Code action")
+    map("n", "K", function() vim.lsp.buf.hover({ border = 'rounded' }) end, opts "Hover")
   end
 
   vim.api.nvim_create_autocmd("LspAttach", {
