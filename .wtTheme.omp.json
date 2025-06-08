@@ -27,7 +27,7 @@
             "cache_duration": "none",
             "style": "full"
           },
-          "template": "{{if .Segments.Git.Ref}}󰊢 {{.Segments.Git.RepoName}}{{.Path | replace .Segments.Git.Dir \"\"}}{{else}} {{.Path}}{{end}} ",
+          "template": "{{if .Segments.Git.Ref}}󰊢 {{if eq .Segments.Git.RepoName \"vivtrain\"}}dotfiles{{else}}{{.Segments.Git.RepoName}}{{end}}{{.Path | replace .Segments.Git.Dir \"\"}}{{else}} {{.Path}}{{end}} ",
           "foreground": "12",
           "type": "path",
           "style": "plain"
