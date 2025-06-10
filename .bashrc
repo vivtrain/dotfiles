@@ -166,7 +166,7 @@ esac
 
 # Start tmux by default if available
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-  tmux new-session -s tmux
+  tmux new-session -A -s tmux
 elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /dev/null` ]; then
   welcome
   tmux set-environment WELCOMED 1
