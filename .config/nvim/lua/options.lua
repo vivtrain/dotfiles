@@ -37,11 +37,16 @@ api.nvim_create_autocmd({ "VimEnter" }, {
   callback = function()
     local bufName = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
     local baseName = vim.fs.basename(bufName)
+    -- Do not open if empty buffer (NvDash)
+    if bufName:len() == 0
+        or baseName:find("COMMIT_EDITMSG", 0, true)
+        or baseName:find("bash-fc", 0, true) then
+      return
+    end
+
     local winWidth = vim.api.nvim_win_get_width(vim.api.nvim_get_current_win())
-    -- Do not open if empty buffer (i.e. NvDash should show)
-    -- or if doing a commit message
-    -- or if window is narrow
-    if bufName:len() > 0 and baseName ~= "COMMIT_EDITMSG" and winWidth > 120 then
+    -- Do not open if narrow window
+    if winWidth > 120 then
       require("nvim-tree.api").tree.toggle({ find_file = true, focus = false, })
     end
   end,

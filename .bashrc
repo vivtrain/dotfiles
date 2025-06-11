@@ -22,7 +22,7 @@ fi
 export CDPATH='.'
 
 # Vim as default editor
-EDITOR=/usr/bin/vim
+EDITOR=nvim
 # Vi-like line editing on the command line
 set -o vi
 # Use physical directories for cd instead of symbolic links
