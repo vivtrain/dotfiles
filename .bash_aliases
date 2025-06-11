@@ -1,6 +1,7 @@
 # Preferences
 alias vim='nvim'
 alias nv='nvim'
+alias view='nvim -R'
 alias vb='vim ~/.bashrc'
 alias sb='source ~/.bashrc'
 alias vba='vim ~/.bash_aliases'
