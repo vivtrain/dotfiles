@@ -1,5 +1,5 @@
 splitw -v
 splitw -h
-select-pane -t2
+select-pane -t1
 splitw -h
-select-pane -t2
+select-pane -t1

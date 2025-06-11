@@ -7,7 +7,7 @@ set completion-ignore-case on
 set show-all-if-unmodified on
 
 # Completion settings
-TAB:menu-complete
+Control-I:menu-complete
 "\e[Z":menu-complete-backward
 Control-x:shell-expand-line
 
