@@ -72,21 +72,22 @@ return {
       opts.preselect = cmp.PreselectMode.None
       opts.completion = { completeopt = "menu,menuone,noinsert,noselect" }
       local function customAbort(callback)
-        vim.fn.execute('call feedkeys("\\<Esc>")')
+        if cmp.visible() then
+          vim.fn.execute('call feedkeys("\\<Esc>")')
+        end
         return cmp.mapping.abort()(callback)
       end
       local customMapping = {
         ["<CR>"] = cmp.mapping({
           i = function(fallback)
             if cmp.visible() and cmp.get_active_entry() then
-              cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+              cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert })
             else
               fallback()
             end
-          end,
-          s = cmp.mapping.confirm({ select = true }),
-          c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+          end
         }),
+        ["<Tab>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
         ["<Esc>"] = customAbort,
       }
       opts.mapping = vim.tbl_deep_extend('force', opts.mapping or {}, customMapping)
