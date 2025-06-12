@@ -32,22 +32,21 @@ alias mkdir='mkdir -m u=rwx,g=r,o=r'
 
 
 # # Shortcuts
-alias py='python3'
+alias py='python'
 alias py3='python3'
-#alias killpy='killall python'
-#alias open='nautilus $1 &>/dev/null'
-#alias term='gnome-terminal'
-#alias sysmon='gnome-system-monitor & disown'
-#alias off='shutdown now'
-#alias fan="sudo ~/scripts/_fan $1"
 alias mk='make'
 alias km='make'
 alias mkr='make && echo "" && ./run'
 alias mkc='make clean'
 alias vs='vim -S'
-alias chrome='google-chrome-stable &> /dev/null & disown'
-alias cwd='basename $PWD'
 alias omp='oh-my-posh'
+function bn {
+  if [ $# -eq 1 ]; then
+    basename `realpath $1`
+  elif [ $# -eq 0 ]; then
+    basename `realpath .`
+  fi
+}
 
 
 # # Git
