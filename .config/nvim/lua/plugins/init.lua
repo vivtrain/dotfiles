@@ -66,32 +66,45 @@ return {
 
   {
     "hrsh7th/nvim-cmp",
-    event = { "InsertEnter", "CmdlineEnter" },
-    opts = function(_, opts)
+    event = { "InsertEnter" },
+    config = function ()
       local cmp = require("cmp")
-      opts.preselect = cmp.PreselectMode.None
-      opts.completion = { completeopt = "menu,menuone,noinsert,noselect" }
-      local function customAbort(callback)
-        if cmp.visible() then
-          vim.fn.execute('call feedkeys("\\<Esc>")')
-        end
-        return cmp.mapping.abort()(callback)
-      end
-      local customMapping = {
-        ["<CR>"] = cmp.mapping({
-          i = function(fallback)
+      local defaults = require("nvchad.configs.cmp")
+      local options = {
+        completion = { completeopt = "menu,menuone,noinsert,noselect" },
+        window = {
+          completion = cmp.config.window.bordered({
+            border = 'single',
+            winhighlight = 'Normal:CmpPmenu,FloatBorder:CmpBorder,CursorLine:CmpSel'
+          }),
+          documentation = cmp.config.window.bordered({
+            border = 'rounded',
+            winhighlight = 'Normal:CmpPmenu,FloatBorder:FloatBorder'
+          }),
+        },
+        mapping = {
+          ["<CR>"] = cmp.mapping(function(fallback)
             if cmp.visible() and cmp.get_active_entry() then
-              cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert })
+              local curNodes = require("luasnip.session").current_nodes
+              local nodeBefore = curNodes[vim.api.nvim_get_current_buf()]
+              cmp.mapping.confirm({
+                behavior = cmp.ConfirmBehavior.Insert,
+                select = true,
+              })()
+              vim.schedule(function()
+              local nodeAfter = curNodes[vim.api.nvim_get_current_buf()]
+                if nodeBefore and nodeAfter and nodeBefore == nodeAfter then
+                  require("luasnip").jump(1)
+                end
+              end)
             else
               fallback()
             end
-          end
-        }),
-        ["<Tab>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-        ["<Esc>"] = customAbort,
+          end)
+        },
       }
-      opts.mapping = vim.tbl_deep_extend('force', opts.mapping or {}, customMapping)
-      return opts
+      options = vim.tbl_deep_extend("force", defaults, options)
+      cmp.setup(options)
     end,
   },
 
