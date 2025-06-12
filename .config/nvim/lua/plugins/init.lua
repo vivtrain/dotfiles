@@ -108,6 +108,37 @@ return {
     end,
   },
 
+  {
+    "windwp/nvim-autopairs",
+    dependencies = {
+      { "hrsh7th/nvim-cmp" },
+    },
+    event = "InsertEnter",
+    opts = {
+      fast_wrap = {},
+      disable_filetype = { "TelescopePrompt", "vim" },
+    },
+    config = function(_, opts)
+      local npairs = require("nvim-autopairs")
+      local rule = require("nvim-autopairs.rule")
+      local cond = require("nvim-autopairs.conds")
+
+      npairs.setup(opts)
+
+      local is_template = require("util.cpair").is_template
+      local semicolon = require("util.cpair").struct_class_semicolon
+      npairs.add_rules({
+        rule("<", ">"):with_pair(cond.none()):with_move(cond.done()):use_key(">"),
+        rule("{", "};", { "cpp", "c" }):with_pair(semicolon),
+      })
+      vim.keymap.set("i", "<", is_template)
+
+      -- setup cmp for autopairs
+      local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+      require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    end,
+  },
+
   { "williamboman/mason-lspconfig.nvim" },
 
   { "mfussenegger/nvim-dap", },
