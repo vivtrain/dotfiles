@@ -22,19 +22,28 @@ local function custom_nv_defaults()
 
     map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
     map("n", "<c-space>", vim.diagnostic.open_float, opts "LSP Open float window")
-    local function rename()
+    local function renameNormal()
       require('nvchad.lsp.renamer')({
         border = "rounded",
         border_hl_group = "FloatBorder",
         right_padding = 15,
-        title = "rename symbol",
+        title = "rename (change)",
         title_hl_group = "@comment.note",
         show_original = true,
         allow_normal = true,
       })
     end
-    map("n", "<F2>", rename, opts "LSP Rename variable")
-    map("n", "<leader>ra", rename, opts "LSP Rename variable")
+    local function renameInsert()
+      require('nvchad.lsp.renamer')({
+        border = "rounded",
+        right_padding = 15,
+        title = "rename (replace)",
+        show_original = false,
+        allow_normal = false,
+      })
+    end
+    map("n", "<leader>rr", renameInsert, opts "LSP Rename variable")
+    map("n", "<leader>ra", renameNormal, opts "LSP Rename variable")
     map("n", "<leader>ca", vim.lsp.buf.code_action, opts "LSP Code action")
     map("n", "K", function() vim.lsp.buf.hover({ border = 'rounded' }) end, opts "Hover")
   end
