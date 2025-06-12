@@ -159,47 +159,91 @@ rainbowColor()
     fi
 }
 
-for i in `seq 0 127`; do
+echo "Red"
+for i in `seq 0 63`; do
     setBackgroundColor $i 0 0
     echo -en " "
 done
 resetOutput
-for i in `seq 255 -1 128`; do
+for i in `seq 127 -1 64`; do
+    setBackgroundColor $i 0 0
+    echo -en " "
+done
+resetOutput
+for i in `seq 128 191`; do
+    setBackgroundColor $i 0 0
+    echo -en " "
+done
+resetOutput
+for i in `seq 255 -1 192`; do
     setBackgroundColor $i 0 0
     echo -en " "
 done
 resetOutput
 
-for i in `seq 0 127`; do
+echo "Green"
+for i in `seq 0 63`; do
     setBackgroundColor 0 $i 0
-    echo -n " "
+    echo -en " "
 done
 resetOutput
-for i in `seq 255 -1 128`; do
+for i in `seq 127 -1 64`; do
     setBackgroundColor 0 $i 0
-    echo -n " "
+    echo -en " "
+done
+resetOutput
+for i in `seq 128 191`; do
+    setBackgroundColor 0 $i 0
+    echo -en " "
+done
+resetOutput
+for i in `seq 255 -1 192`; do
+    setBackgroundColor 0 $i 0
+    echo -en " "
 done
 resetOutput
 
-for i in `seq 0 127`; do
+echo "Blue"
+for i in `seq 0 63`; do
     setBackgroundColor 0 0 $i
-    echo -n " "
+    echo -en " "
 done
 resetOutput
-for i in `seq 255 -1 128`; do
+for i in `seq 127 -1 64`; do
     setBackgroundColor 0 0 $i
-    echo -n " "
+    echo -en " "
+done
+resetOutput
+for i in `seq 128 191`; do
+    setBackgroundColor 0 0 $i
+    echo -en " "
+done
+resetOutput
+for i in `seq 255 -1 192`; do
+    setBackgroundColor 0 0 $i
+    echo -en " "
 done
 resetOutput
 
-for i in `seq 0 127`; do
+echo "Rainbow"
+for i in `seq 0 63`; do
     setBackgroundColor `rainbowColor $i`
-    echo -n " "
+    echo -en " "
 done
 resetOutput
-for i in `seq 255 -1 128`; do
+for i in `seq 127 -1 64`; do
     setBackgroundColor `rainbowColor $i`
-    echo -n " "
+    echo -en " "
+done
+resetOutput
+for i in `seq 128 191`; do
+    setBackgroundColor `rainbowColor $i`
+    echo -en " "
+done
+resetOutput
+for i in `seq 255 -1 192`; do
+    setBackgroundColor `rainbowColor $i`
+    echo -en " "
 done
 resetOutput
 
