@@ -22,7 +22,6 @@ map("n", "q<cr>", "q:", desc "Command Enter command window")
 unmap("n", "<leader>v")
 map("n", "<leader>v", "<cmd> vsp | term <cr><cmd> startinsert <cr>", desc "Terminal Open vertical split")
 
-map({"t","n"}, "<c-p>", "<cmd> wincmd p <cr>", desc "Terminal Return to editor buffer")
 map("t", "<c-h>", "<cmd> wincmd h <cr>", desc "Terminal Move to left window")
 map("t", "<c-j>", "<cmd> wincmd j <cr>", desc "Terminal Move to lower window")
 map("t", "<c-k>", "<cmd> wincmd k <cr>", desc "Terminal Move to upper window")
