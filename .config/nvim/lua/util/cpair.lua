@@ -57,13 +57,33 @@ function M.is_template()
 end
 
 function M.struct_class_semicolon()
-  local line = vim.api.nvim_get_current_line()
-  -- match for() while() functions()
-  local pattern = "\\m^.*(.*)"
-
-  if vim.fn.match(line, pattern) ~= -1 or vim.fn.match(line, "namespace") ~= -1 then
-    return false
+  local function match(str, pat)
+    return vim.fn.match(str, pat) ~= -1
   end
+
+  local line = vim.api.nvim_get_current_line()
+  local probablySTL = "vector\\|map\\|pair\\|tuple\\|set\\|array\\|list\\|stack\\|queue"
+
+  local structOrClass = match(line, "struct\\|class")
+  local stlInitializer = match(line, probablySTL)
+      and not match(line, "{") and not match(line, "(")
+
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  local prevLine = vim.api.nvim_buf_get_lines(0, row - 2, row - 1, false)[1]
+  if not structOrClass then
+    while row > 0 and match(prevLine, "^\\s*$") do
+      row = row - 1
+      prevLine = vim.api.nvim_buf_get_lines(0, row - 2, row - 1, false)[1]
+    end
+  end
+
+  local prevStructOrClass = match(prevLine, "struct\\|class")
+  local prevStlInitializer = match(prevLine, probablySTL)
+      and not match(prevLine, "{") and not match(prevLine, "(")
+
+  return structOrClass or prevStructOrClass
+    or stlInitializer or prevStlInitializer
+
 end
 
 return M
