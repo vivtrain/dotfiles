@@ -47,6 +47,14 @@ function bn {
     basename `realpath .`
   fi
 }
+function completeProblem (
+  if [[ $PWD == *Grind75* ]]; then
+    git commit -m "Completed `realpath . | sed 's:^.*Grind75/::'`"
+  else
+    echo "Not in Grind75 directory"
+    exit 1
+  fi
+)
 
 
 # # Git
