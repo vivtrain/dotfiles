@@ -57,17 +57,24 @@ function M.is_template()
 end
 
 function M.struct_class_semicolon()
+  -- Convenience for finding patterns
   local function match(str, pat)
     return vim.fn.match(str, pat) ~= -1
   end
 
+  -- Patterns to check against
+  local structOrClassPattern = "struct\\|class"
+  local probablySTLPattern =
+    "vector\\|map\\|pair\\|tuple\\|set\\|array\\|list\\|stack\\|queue"
+  local parensPattern = "(\\|{"
+
+  -- Current line checks
   local line = vim.api.nvim_get_current_line()
-  local probablySTL = "vector\\|map\\|pair\\|tuple\\|set\\|array\\|list\\|stack\\|queue"
+  local structOrClass = match(line, structOrClassPattern)
+  local stlInitializer = match(line, probablySTLPattern)
+  local parens = match(line, parensPattern)
 
-  local structOrClass = match(line, "struct\\|class")
-  local stlInitializer = match(line, probablySTL)
-      and not match(line, "{") and not match(line, "(")
-
+  -- Find previous non-whitespace line
   local row = vim.api.nvim_win_get_cursor(0)[1]
   local prevLine = vim.api.nvim_buf_get_lines(0, row - 2, row - 1, false)[1]
   if not structOrClass then
@@ -77,12 +84,13 @@ function M.struct_class_semicolon()
     end
   end
 
-  local prevStructOrClass = match(prevLine, "struct\\|class")
-  local prevStlInitializer = match(prevLine, probablySTL)
-      and not match(prevLine, "{") and not match(prevLine, "(")
+  -- Previous (non-whitespace) checks
+  local prevStructOrClass = match(prevLine, structOrClassPattern)
+  local prevStlInitializer = match(prevLine, probablySTLPattern)
+  local prevParens = match(prevLine, parensPattern)
 
-  return structOrClass or prevStructOrClass
-    or stlInitializer or prevStlInitializer
+  return ( (structOrClass or prevStructOrClass) and not (parens or prevParens) )
+    or ( (stlInitializer or prevStlInitializer) and not (parens or prevParens) )
 
 end
 
