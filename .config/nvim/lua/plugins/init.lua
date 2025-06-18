@@ -85,16 +85,19 @@ return {
         mapping = {
           ["<CR>"] = cmp.mapping(function(fallback)
             if cmp.visible() and cmp.get_active_entry() then
-              local curNodes = require("luasnip.session").current_nodes
-              local nodeBefore = curNodes[vim.api.nvim_get_current_buf()]
+              print('')
+              local buf = vim.api.nvim_get_current_buf()
+              local sess = require("luasnip.session")
+              local nodeBefore = sess.current_nodes[buf]
               cmp.mapping.confirm({
                 behavior = cmp.ConfirmBehavior.Insert,
                 select = true,
               })()
               vim.schedule(function()
-              local nodeAfter = curNodes[vim.api.nvim_get_current_buf()]
-                if nodeBefore and nodeAfter and nodeBefore == nodeAfter then
-                  require("luasnip").jump(1)
+                local nodeAfter = sess.current_nodes[buf]
+                if nodeBefore and nodeBefore.pos > 0
+                    and (nodeBefore == nodeAfter) then
+                  vim.fn.feedkeys("\t")
                 end
               end)
             else
