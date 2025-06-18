@@ -6,7 +6,6 @@ function M.is_template()
   local buf = vim.api.nvim_get_current_buf()
   local win = vim.api.nvim_get_current_win()
   local line = vim.api.nvim_buf_get_lines(buf, row - 1, row, false)[1]
-  print(line)
   local r, c = unpack(vim.api.nvim_win_get_cursor(0))
   if not (vim.o.filetype == "cpp" or vim.o.filetype == "c") then
     line = line:sub(1, c) .. "<" .. line:sub(c + 1)
