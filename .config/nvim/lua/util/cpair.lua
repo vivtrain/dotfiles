@@ -98,8 +98,12 @@ function M.struct_class_semicolon()
   local prevStlInitializer = match(prevLine, probablySTLPattern)
   local prevParens = match(prevLine, parensPattern)
 
-  return ( (structOrClass or prevStructOrClass) and not (parens or prevParens) )
-    or ( (stlInitializer or prevStlInitializer) and not (parens or prevParens) )
+  local isStructOrClass = (structOrClass and not parens)
+    or (prevStructOrClass and not prevParens)
+  local isStl = (stlInitializer and not parens)
+    or (prevStlInitializer and not prevParens)
+
+  return isStructOrClass or isStl
 
 end
 
