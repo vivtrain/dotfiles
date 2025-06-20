@@ -1,81 +1,83 @@
 local M = {}
 
-function M.is_template()
+---Convenience function for finding a pattern match
+---@param str string
+---@param pattern string
+---@return boolean
+local function match(str, pattern)
+  return vim.fn.match(str, pattern) ~= -1
+end
 
-  local row = vim.api.nvim_win_get_cursor(0)[1]
+---Convenience function to combine patterns using logical or
+---@param ... string
+---@return string
+local function orPat(...)
+  local pat = ""
+  for i,v in ipairs({...}) do
+    pat = i == 1 and v or pat .. "\\|" .. v
+  end
+  return pat
+end
+
+function M.complete_angle()
+
   local buf = vim.api.nvim_get_current_buf()
   local win = vim.api.nvim_get_current_win()
+  local row = vim.api.nvim_win_get_cursor(win)[1]
+  local col = vim.api.nvim_win_get_cursor(win)[2]
   local line = vim.api.nvim_buf_get_lines(buf, row - 1, row, false)[1]
-  local r, c = unpack(vim.api.nvim_win_get_cursor(0))
+
+  local function open()
+    line = line:sub(1, col) .. "<" .. line:sub(col + 1)
+    vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {line})
+    vim.api.nvim_win_set_cursor(win, { row, col + 1 })
+  end
+
+  local function close()
+    line = line:sub(1, col + 1) .. ">" .. line:sub(col + 2)
+    vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {line})
+    vim.api.nvim_win_set_cursor(win, { row, col + 1 })
+  end
+
   if not (vim.o.filetype == "cpp" or vim.o.filetype == "c") then
-    line = line:sub(1, c) .. "<" .. line:sub(c + 1)
-    -- vim.api.nvim_set_current_line(line)
-    vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {line})
-    vim.api.nvim_win_set_cursor(win, { r, c + 1 })
+    open()
     return
   end
 
-  if vim.fn.match({ line }, "template") == 0 then
-    line = line:sub(1, c) .. "<>" .. line:sub(c + 1)
-    -- vim.api.nvim_set_current_line(line)
-    vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {line})
-    vim.api.nvim_win_set_cursor(win, { r, c + 1 })
+  if match(line, orPat("template", "#include", "cast\\s*$")) then
+    open()
+    close()
     return
   end
 
-  if vim.fn.match({ line }, "#include") == 0 then
-    line = line:sub(1, c) .. "<>" .. line:sub(c + 1)
-    if line:sub(c, c) ~= " " then
-      line = line:sub(1, c) .. " " .. line:sub(c + 1)
-      c = c + 1
-    end
-    -- vim.api.nvim_set_current_line(line)
-    vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {line})
-    vim.api.nvim_win_set_cursor(win, { r, c + 1 })
-    return
-  end
-  if vim.fn.match({ line:sub(0, c) }, "cast\\s*$") == 0 then
-    -- c - 1 = 2 chars before the cursor
-    line = line:sub(1, c) .. "<>" .. line:sub(c + 1)
-    -- vim.api.nvim_set_current_line(line)
-    vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {line})
-    vim.api.nvim_win_set_cursor(win, { r, c + 1 })
-    return
-  end
-
-
-  line = line:sub(1, c) .. "<" .. line:sub(c + 1)
-  -- vim.api.nvim_set_current_line(line)
-  vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {line})
-  vim.api.nvim_win_set_cursor(win, { r, c + 1 })
+  open()
   vim.cmd("redraw") -- redraw to add the first <
 
   local old_handler = vim.lsp.handlers["textDocument/signatureHelp"]
-  vim.lsp.handlers["textDocument/signatureHelp"] = function(_, info)
-    if info and info.signatures and info.signatures[1] and info.signatures[1].label then
+  vim.lsp.handlers["textDocument/signatureHelp"] = function(_, info, _, _)
+    if info and info.signatures and info.signatures[1]
+        and info.signatures[1].label then
       local functionsig = info.signatures[1].label
       if vim.fn.match({ functionsig }, "^\\w\\+<") == 0 then
         -- c + 1 is after including the openning pair very shady code lol
-        line = line:sub(0, c + 1) .. ">" .. line:sub(c + 2)
-        vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {line})
+        close()
       end
     end
   end
-  vim.lsp.buf.signature_help()
+  local encoding = vim.api.nvim_get_option_value("fileencoding", {})
+  local util = require('vim.lsp.util')
+  local positionParams = util.make_position_params(win, encoding)
+  vim.lsp.buf_request(buf, "textDocument/signatureHelp", positionParams)
   vim.lsp.handlers["textDocument/signatureHelp"] = old_handler
 end
 
-function M.struct_class_semicolon()
-  -- Convenience for finding patterns
-  local function match(str, pat)
-    return vim.fn.match(str, pat) ~= -1
-  end
+function M.should_add_semicolon()
 
   -- Patterns to check against
-  local structOrClassPattern = "struct\\|class"
-  local probablySTLPattern =
-    "vector\\|map\\|pair\\|tuple\\|set\\|array\\|list\\|stack\\|queue"
-  local parensPattern = "(\\|{"
+  local parensPattern = orPat("(","{")
+  local structOrClassPattern = orPat("struct", "class")
+  local probablySTLPattern
+    = orPat("vector","map","pair","tuple","set","array","list","stack","queue")
 
   -- Current line checks
   local line = vim.api.nvim_get_current_line()

@@ -128,13 +128,13 @@ return {
 
       npairs.setup(opts)
 
-      local is_template = require("util.cpair").is_template
-      local semicolon = require("util.cpair").struct_class_semicolon
+      local angle = require("util.cpair").complete_angle
+      local semicolon = require("util.cpair").should_add_semicolon
       npairs.add_rules({
         rule("<", ">"):with_pair(cond.none()):with_move(cond.done()):use_key(">"),
         rule("{", "};", { "cpp", "c" }):with_pair(semicolon),
       })
-      vim.keymap.set("i", "<", is_template)
+      vim.keymap.set("i", "<", angle)
 
       -- setup cmp for autopairs
       local cmp_autopairs = require "nvim-autopairs.completion.cmp"
