@@ -101,9 +101,9 @@ function M.should_add_semicolon()
   local prevParens = match(prevLine, parensPattern)
 
   local isStructOrClass = (structOrClass and not parens)
-    or (prevStructOrClass and not prevParens)
+    or (prevStructOrClass and not (parens or prevParens))
   local isStl = (stlInitializer and not parens)
-    or (prevStlInitializer and not prevParens)
+    or (prevStlInitializer and not (parens or prevParens))
 
   return isStructOrClass or isStl
 
