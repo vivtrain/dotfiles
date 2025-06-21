@@ -74,7 +74,7 @@ end
 function M.should_add_semicolon()
 
   -- Patterns to check against
-  local parensPattern = orPat("(","{")
+  local abortPattern = orPat("(","{",";")
   local structOrClassPattern = orPat("struct", "class")
   local probablySTLPattern
     = orPat("vector","map","pair","tuple","set","array","list","stack","queue")
@@ -83,7 +83,7 @@ function M.should_add_semicolon()
   local line = vim.api.nvim_get_current_line()
   local structOrClass = match(line, structOrClassPattern)
   local stlInitializer = match(line, probablySTLPattern)
-  local parens = match(line, parensPattern)
+  local parens = match(line, abortPattern)
 
   -- Find previous non-whitespace line
   local row = vim.api.nvim_win_get_cursor(0)[1]
@@ -98,7 +98,7 @@ function M.should_add_semicolon()
   -- Previous (non-whitespace) checks
   local prevStructOrClass = match(prevLine, structOrClassPattern)
   local prevStlInitializer = match(prevLine, probablySTLPattern)
-  local prevParens = match(prevLine, parensPattern)
+  local prevParens = match(prevLine, abortPattern)
 
   local isStructOrClass = (structOrClass and not parens)
     or (prevStructOrClass and not (parens or prevParens))
