@@ -75,7 +75,7 @@ function M.should_add_semicolon()
 
   -- Patterns to check against
   local abortPattern = orPat("(",")","{","}",";")
-  local structOrClassPattern = orPat("struct", "class")
+  local structOrClassPattern = orPat("struct", "class", "enum")
   local probablySTLPattern
     = orPat("vector","map","pair","tuple","set","array","list","stack","queue")
 
