@@ -53,11 +53,11 @@ api.nvim_create_autocmd({ "VimEnter" }, {
   end,
 })
 api.nvim_create_autocmd({ "VimEnter" }, {
-  desc = "Open NvDash except when pipe",
+  desc = "Open NvDash",
   callback = function()
-    local bufNonEmpty = fn.line2byte('$') ~= -1
+    local bufEmpty = fn.line2byte('$') == -1
     local noArgs = fn.argc() == 0
-    if not (bufNonEmpty and noArgs) then
+    if bufEmpty and noArgs then
       vim.fn.execute('Nvdash')
     end
   end,
