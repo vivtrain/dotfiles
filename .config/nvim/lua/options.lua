@@ -2,6 +2,7 @@ require "nvchad.options"
 
 local o = vim.o
 local g = vim.g
+local fn = vim.fn
 local api = vim.api
 
 -- Setup WSL clipboard
@@ -48,6 +49,16 @@ api.nvim_create_autocmd({ "VimEnter" }, {
     -- Do not open if narrow window
     if winWidth > 120 then
       require("nvim-tree.api").tree.toggle({ find_file = true, focus = false, })
+    end
+  end,
+})
+api.nvim_create_autocmd({ "VimEnter" }, {
+  desc = "Open NvDash except when pipe",
+  callback = function()
+    local bufNonEmpty = fn.line2byte('$') ~= -1
+    local noArgs = fn.argc() == 0
+    if not (bufNonEmpty and noArgs) then
+      vim.fn.execute('Nvdash')
     end
   end,
 })

@@ -134,6 +134,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Set the environment variable for X11 via Xming on Windows WSL
 if [ -n $(uname -r | grep -i microsoft) ]; then
   export DISPLAY=$(awk '/nameserver/ {print $2}' < /etc/resolv.conf):0.0
+  export LIBGL_ALWAYS_INDIRECT=1
 fi
 
 # Start an ssh agent by default
