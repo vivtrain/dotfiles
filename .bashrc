@@ -16,6 +16,7 @@ if [ -z "$TMUX" ]; then
 /home/vivtrain/.local/bin/:\
 /home/vivtrain/misc/scripts/:\
 /home/vivtrain/.nvm/versions/node/v20.17.0/bin/:\
+/usr/local/cuda/bin/:\
 $PATH"
 fi
 
