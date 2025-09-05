@@ -2,8 +2,8 @@ require "nvchad.mappings"
 
 local map = vim.keymap.set
 local unmap = vim.keymap.del
-local function desc(desc)
-  return { desc = desc }
+local function desc(d)
+  return { desc = d }
 end
 
 unmap("n", "<leader>ch")
@@ -12,7 +12,6 @@ map("n", "<leader>ch", "<cmd> NvimTreeClose <cr><cmd> NvCheatsheet <cr>")
 map("i", "jk", "<esc>", desc "Exit insert mode")
 map("i", "kj", "<esc>", desc "Exit insert mode")
 
-map("n", "<tab>", "<c-w>", desc "Window navigation prefix")
 map("n", "+", "<c-w>+", desc "Window Adjust split height up")
 map("n", "_", "<c-w>-", desc "Window Adjust split height down")
 map("n", "<leader>]", "<cmd> vert res -1 <cr>", desc "Window Adjust split width right")
@@ -21,6 +20,12 @@ map("n", "&", "<cmd> && <cr>", desc "Repeat Last substitute")
 map("n", "q<cr>", "q:", desc "Command Enter command window")
 unmap("n", "<leader>v")
 map("n", "<leader>v", "<cmd> vsp | term <cr><cmd> startinsert <cr>", desc "Terminal Open vertical split")
+
+unmap("n", "<tab>")
+map("n", "<tab><tab>", "gt", desc "Tab Next tab")
+map("n", "<s-tab><s-tab>", "gT", desc "Tab Previous tab")
+map("n", "<tab>n", "<cmd> tabnew <cr>", desc "Tab New tab")
+map("n", "<tab>c", "<cmd> tabclose <cr>", desc "Tab Close tab")
 
 map("t", "<c-h>", "<cmd> wincmd h <cr>", desc "Terminal Move to left window")
 map("t", "<c-j>", "<cmd> wincmd j <cr>", desc "Terminal Move to lower window")
