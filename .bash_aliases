@@ -42,6 +42,7 @@ alias krm=mkr
 alias rmk=mkr
 alias mkc='make clean'
 alias vs='vim -S'
+alias nvs='nvim -S'
 alias omp='oh-my-posh'
 function bn {
   if [ $# -eq 1 ]; then
