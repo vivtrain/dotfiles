@@ -18,6 +18,7 @@ alias la='ls -A'
 alias lla='ll -A'
 alias l='ll'
 alias tree='tree -vC'
+alias treeg='tree --gitignore'
 
 alias ppd='popd'
 alias pd=pushd $1
