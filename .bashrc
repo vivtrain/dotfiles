@@ -148,15 +148,13 @@ if command -v oh-my-posh &> /dev/null; then
   eval "$(oh-my-posh init bash --config ~/.wtTheme.omp.json)"
 fi
 
-# Function to load nvm startup scripts
-load_nvm() {
-  if [ -z $NVM_DIR ]; then
-    export NVM_DIR="$HOME/.nvm"
-    # Source these scripts to use the nvm command properly
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  fi
-}
+# Load nvm startup scripts
+if [ -z $NVM_DIR ]; then
+  export NVM_DIR="$HOME/.nvm"
+  # Source these scripts to use the nvm command properly
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 # pnpm
 export PNPM_HOME="/home/vivtrain/.local/share/pnpm"
@@ -173,4 +171,8 @@ elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /de
   welcome
   tmux set-environment WELCOMED 1
 fi
+
+# php development paths
+export PATH="/home/vivtrain/.config/herd-lite/bin:$PATH"
+export PHP_INI_SCAN_DIR="/home/vivtrain/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 
