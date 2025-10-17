@@ -122,3 +122,9 @@ lspconfig.eslint.setup({
 lspconfig.cssls.setup({
 })
 
+lspconfig.intelephense.setup({
+  filetypes = {
+    "php"
+  }
+})
+
