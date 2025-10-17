@@ -27,6 +27,11 @@ map("n", "<s-tab><s-tab>", "gT", desc "Tab Previous tab")
 map("n", "<tab>n", "<cmd> tabnew <cr>", desc "Tab New tab")
 map("n", "<tab>c", "<cmd> tabclose <cr>", desc "Tab Close tab")
 
+local tabufline = require('nvchad.tabufline')
+unmap("n", "<leader>b")
+map("n", "<leader>bn", function() tabufline.next() end, desc "Tabufline Next")
+map("n", "<leader>bp", function() tabufline.prev() end, desc "Tabufline Prev")
+
 map("t", "<c-h>", "<cmd> wincmd h <cr>", desc "Terminal Move to left window")
 map("t", "<c-j>", "<cmd> wincmd j <cr>", desc "Terminal Move to lower window")
 map("t", "<c-k>", "<cmd> wincmd k <cr>", desc "Terminal Move to upper window")
