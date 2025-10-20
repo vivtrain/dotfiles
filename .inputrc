@@ -12,6 +12,7 @@ Control-I:menu-complete
 Control-x:shell-expand-line
 
 # Use vi mode and let the cursor show what mode you are in (uses ANSI esc codes)
+set editing-mode vi
 set show-mode-in-prompt on
 set vi-cmd-mode-string "\1\e[2 q\2"
 set vi-ins-mode-string "\1\e[6 q\2"
