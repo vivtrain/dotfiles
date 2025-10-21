@@ -84,7 +84,7 @@ alias paste='powershell.exe Get-Clipboard'
 
 
 # # Colors and highlights
-export        NO_COLOR='\e[0m'
+export    NORMAL_COLOR='\e[0m'
 export           BLACK='\e[30m'
 export             RED='\e[31m'
 export           GREEN='\e[32m'
