@@ -45,6 +45,7 @@ alias mkc='make clean'
 alias vs='vim -S'
 alias nvs='nvim -S'
 alias omp='oh-my-posh'
+alias prettyjson='python -m json.tool'
 function bn {
   if [ $# -eq 1 ]; then
     basename `realpath $1`
@@ -74,6 +75,7 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gf='git fetch origin'
 alias gr='cd $(git rev-parse --show-toplevel)'
+alias grd='git rev-parse --show-toplevel'
 alias prod='git switch production'
 alias dev='git switch development'
 
