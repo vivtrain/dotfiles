@@ -28,7 +28,7 @@
             "style": "full"
           },
           "template": "{{if .Segments.Git.Ref}}󰊢 {{if eq .Segments.Git.RepoName \"vivtrain\"}}dotfiles{{else}}{{.Segments.Git.RepoName}}{{end}}{{.Path | replace .Segments.Git.Dir \"\"}}{{else}} {{.Path}}{{end}} ",
-          "foreground": "12",
+          "foreground": "#4488ff",
           "type": "path",
           "style": "plain"
         },
