@@ -132,12 +132,6 @@ fi
 # Add an "alert" alias for long running commands.
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Set the environment variable for X11 via Xming on Windows WSL
-if [ -n $(uname -r | grep -i microsoft) ]; then
-  export DISPLAY=$(awk '/nameserver/ {print $2}' < /etc/resolv.conf):0.0
-  export LIBGL_ALWAYS_INDIRECT=1
-fi
-
 # Start an ssh agent by default
 if [ -z "$SSH_AUTH_SOCK" ]; then
   eval `ssh-agent -s` > /dev/null
@@ -145,7 +139,7 @@ fi
 
 # Use oh-my-posh if available
 if command -v oh-my-posh &> /dev/null; then
-  eval "$(oh-my-posh init bash --config ~/.wtTheme.omp.json)"
+  eval "$(oh-my-posh init bash --config ~/.think.omp.json)"
 fi
 
 # Load nvm startup scripts
