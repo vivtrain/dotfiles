@@ -1,0 +1,82 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "╭─",
+          "foreground": "15",
+          "type": "text",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "<49> {{ .UserName }}</> <#73a7a7>in</> ",
+          "type": "session",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
+            "style": "full"
+          },
+          "template": "{{if .Segments.Git.Ref}}󰊢 {{if eq .Segments.Git.RepoName \"vivtrain\"}}dotfiles{{else}}{{.Segments.Git.RepoName}}{{end}}{{.Path | replace .Segments.Git.Dir \"\"}}{{else}} {{.Path}}{{end}} ",
+          "foreground": "#5588ff",
+          "type": "path",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
+            "fetch_stash_count": true,
+            "fetch_status": true,
+            "fetch_upstream_icon": true,
+            "branch_icon": " ",
+            "tag_icon": " ",
+            "commit_icon": " "
+          },
+          "template": "<#73a7a7>on </>{{ .HEAD }}{{ if gt .StashCount 0 }}<#97bfbc>  {{ .StashCount }}</>{{ end }}{{ if gt .Behind 0 }}<#ff4a4a>  {{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<#f5d142>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<#91e031>  {{ .Staging.String }}</>{{ end }}{{ if gt .Ahead 0 }}<#029c4f>  {{ .Ahead }}</>{{ end }}",
+          "foreground": "198",
+          "type": "git",
+          "style": "diamond"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
+            "time_format": "<#00ffff> 3:04:05 pm</> on <#00aaaa> Mon 01/02</>"
+          },
+          "template": "\n<15>│</>    at {{ .CurrentDate | date .Format }}",
+          "foreground": "#73a7a7",
+          "type": "time",
+          "style": "plain"
+        }
+      ],
+      "newline": true
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "╰󰋇",
+          "foreground": "15",
+          "type": "text",
+          "style": "plain"
+        }
+      ],
+      "newline": true
+    }
+  ],
+  "version": 3,
+  "final_space": true
+}
