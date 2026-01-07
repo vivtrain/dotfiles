@@ -14,8 +14,6 @@ if [ -z "$TMUX" ]; then
     export PATH="\
 /opt/nvim-linux64/bin:\
 /home/vivtrain/.local/bin/:\
-/home/vivtrain/misc/scripts/:\
-/home/vivtrain/.nvm/versions/node/v20.17.0/bin/:\
 /usr/local/cuda/bin/:\
 $PATH"
 fi
@@ -142,13 +140,25 @@ if command -v oh-my-posh &> /dev/null; then
   eval "$(oh-my-posh init bash --config ~/.think.omp.json)"
 fi
 
-# Load nvm startup scripts
-if [ -z $NVM_DIR ]; then
-  export NVM_DIR="$HOME/.nvm"
-  # Source these scripts to use the nvm command properly
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
+# Load nvm startup scripts lazily
+lazynvm() {
+  unset -f nvm node npm
+  export NVM_DIR=~/.nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+  nvm use default
+}
+nvm() {
+  lazynvm
+  nvm $@
+}
+node() {
+  lazynvm
+  node $@
+}
+npm() {
+  lazynvm
+  npm $@
+}
 
 # pnpm
 export PNPM_HOME="/home/vivtrain/.local/share/pnpm"
