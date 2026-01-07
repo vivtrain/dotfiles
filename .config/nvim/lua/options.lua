@@ -5,19 +5,6 @@ local g = vim.g
 local fn = vim.fn
 local api = vim.api
 
--- Setup WSL clipboard
-g.clipboard = {
-  name = "clip-wsl",
-  copy = {
-    ["+"] = "clip.exe",
-    ["*"] = "clip.exe",
-  },
-  paste = {
-    ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-    ['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-  },
-  cache_enabled = true,
-}
 g.python_recommended_style = 0;
 o.clipboard = ""
 o.colorcolumn = "81"
