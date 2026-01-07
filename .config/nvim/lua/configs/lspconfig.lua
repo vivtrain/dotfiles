@@ -26,7 +26,7 @@ local function custom_nv_defaults()
       require('nvchad.lsp.renamer')({
         border = "rounded",
         border_hl_group = "FloatBorder",
-        right_padding = 15,
+        right_padding = 17,
         title = "rename (change)",
         title_hl_group = "@comment.note",
         show_original = true,
@@ -36,7 +36,7 @@ local function custom_nv_defaults()
     local function renameInsert()
       require('nvchad.lsp.renamer')({
         border = "rounded",
-        right_padding = 15,
+        right_padding = 17,
         title = "rename (replace)",
         show_original = false,
         allow_normal = false,
