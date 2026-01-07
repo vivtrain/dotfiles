@@ -33,7 +33,7 @@ alias mkdir='mkdir -m u=rwx,g=r,o=r'
 
 # # Shortcuts
 alias tm='tmux new-session -A -s tmux'
-alias py='python'
+alias py='python3'
 alias py3='python3'
 alias mk='make'
 alias km='make'
