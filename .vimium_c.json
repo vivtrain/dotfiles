@@ -1,0 +1,76 @@
+{
+	"name": "Vimium C",
+	"@time": "1/7/2026, 10:14:41 PM",
+	"time": 1767852881779,
+	"environment": {
+		"extension": "2.12.2",
+		"platform": "win",
+		"chromium": 143
+	},
+	"exclusionOnlyFirstMatch": true,
+	"exclusionRules": [
+		{
+			"passKeys": "",
+			"pattern": ":https://docs.google.com"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://keep.google.com"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://trello.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": "^https?://localhost:8888/"
+		},
+		{
+			"passKeys": "# e s x ",
+			"pattern": "^https://mail.google.com/mail/u/\\d+/[#/a-z]+/\\w{32}"
+		},
+		{
+			"passKeys": "# e j k s x ",
+			"pattern": "^https://mail.google.com/mail/u/\\d+/[#/a-z]"
+		},
+		{
+			"passKeys": "m t ",
+			"pattern": ":https://calendar.google.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://cad.onshape.com"
+		},
+		{
+			"passKeys": "<esc> ",
+			"pattern": ":https://leetcode.com/problems/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://app.coderpad.io"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://coderpad.io"
+		}
+	],
+	"grabBackFocus": true,
+	"keyMappings": [
+		"#! no-check",
+		"map ' Marks.activate",
+		"map J nextTab",
+		"map K previousTab",
+		""
+	],
+	"linkHintCharacters": "fdsajkl;",
+	"linkHintNumbers": "abcdefg",
+	"newTabUrl": "http://www.google.com",
+	"regexFindMode": true,
+	"userDefinedCss": [
+		".D .LH { background:#006eff; color:white; border:0px;}",
+		".D .LH .MC { color:#006eff; }",
+		".D .BH { background:#2c395e; color:#a5b9f2; }",
+		".D .BH .MC { color:#2c395e; }",
+		""
+	]
+}
