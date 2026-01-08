@@ -140,24 +140,12 @@ if command -v oh-my-posh &> /dev/null; then
   eval "$(oh-my-posh init bash --config ~/.think.omp.json)"
 fi
 
-# Load nvm startup scripts lazily
-lazynvm() {
+# Load nvm startup scripts manually
+loadnvm() {
   unset -f nvm node npm
   export NVM_DIR=~/.nvm
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
   nvm use default
-}
-nvm() {
-  lazynvm
-  nvm $@
-}
-node() {
-  lazynvm
-  node $@
-}
-npm() {
-  lazynvm
-  npm $@
 }
 
 # pnpm
@@ -168,17 +156,17 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+# php development paths
+export PATH="/home/vivtrain/.config/herd-lite/bin:$PATH"
+export PHP_INI_SCAN_DIR="/home/vivtrain/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
+
 # Start tmux by default if available
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+  # anything that needs to happen once on tmux startup
+  loadnvm > /dev/null
   tmux new-session -A -s tmux
 elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /dev/null` ]; then
   welcome
   tmux set-environment WELCOMED 1
-  # anything else you need done only once here
-  lazynvm > /dev/null
 fi
-
-# php development paths
-export PATH="/home/vivtrain/.config/herd-lite/bin:$PATH"
-export PHP_INI_SCAN_DIR="/home/vivtrain/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 
