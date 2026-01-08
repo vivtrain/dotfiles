@@ -149,12 +149,30 @@ if command -v oh-my-posh &> /dev/null; then
 fi
 
 # Load nvm startup scripts
-if [ -z $NVM_DIR ]; then
-  export NVM_DIR="$HOME/.nvm"
-  # Source these scripts to use the nvm command properly
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
+lazynvm() {
+  unset -f nvm node npm npx
+  export NVM_DIR=~/.nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+  if [ -f "$NVM_DIR/bash_completion" ]; then
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+  fi
+}
+nvm() {
+  lazynvm
+  nvm $@
+}
+node() {
+  lazynvm
+  node $@
+}
+npm() {
+  lazynvm
+  npm $@
+}
+npx() {
+  lazynvm
+  npx $@
+}
 
 # pnpm
 export PNPM_HOME="/home/vivtrain/.local/share/pnpm"
@@ -170,6 +188,8 @@ if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
 elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /dev/null` ]; then
   welcome
   tmux set-environment WELCOMED 1
+  # anything else on tmux startup here
+  lazynvm
 fi
 
 # php development paths
