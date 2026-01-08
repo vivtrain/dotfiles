@@ -42,7 +42,7 @@
             "tag_icon": " ",
             "commit_icon": " "
           },
-          "template": "<#73a7a7>on </>{{ .HEAD }}{{ if gt .StashCount 0 }}<#97bfbc>  {{ .StashCount }}</>{{ end }}{{ if gt .Behind 0 }}<#ff4a4a>  {{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<#f5d142>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<#91e031>  {{ .Staging.String }}</>{{ end }}{{ if gt .Ahead 0 }}<#029c4f>  {{ .Ahead }}</>{{ end }}",
+          "template": "<#73a7a7>on </><#ff4499>{{ .HEAD }}</>{{ if gt .StashCount 0 }}<#97bfbc>  {{ .StashCount }}</>{{ end }}{{ if gt .Behind 0 }}<#ff4a4a>  {{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<#f5d142>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<#91e031>  {{ .Staging.String }}</>{{ end }}{{ if gt .Ahead 0 }}<#029c4f>  {{ .Ahead }}</>{{ end }}",
           "foreground": "198",
           "type": "git",
           "style": "diamond"
