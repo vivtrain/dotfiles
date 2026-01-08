@@ -48,6 +48,13 @@
           "style": "diamond"
         },
         {
+          "type": "python",
+          "style": "powerline",
+          "foreground": "#906cff",
+          "background": "#100e23",
+          "template": "<#73a7a7> using</>  {{.Major}}.{{.Minor}} "
+        },
+        {
           "properties": {
             "cache_duration": "none",
             "time_format": "<#00ffff> 3:04:05 pm</> on <#00aaaa> Mon 01/02</>"
