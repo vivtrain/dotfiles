@@ -171,11 +171,11 @@ esac
 # Start tmux by default if available
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   tmux new-session -A -s tmux
-  # anything else you need done only once here
-  lazynvm
 elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /dev/null` ]; then
   welcome
   tmux set-environment WELCOMED 1
+  # anything else you need done only once here
+  lazynvm > /dev/null
 fi
 
 # php development paths
