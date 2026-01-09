@@ -170,3 +170,19 @@ elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /de
   tmux set-environment WELCOMED 1
 fi
 
+# Load Python venv (and save into tmux session)
+function ldvenv {
+  dir='venv'
+  if [ -n "$1" ]; then
+    dir=$1
+  fi
+  source "$dir/bin/activate"
+  if [ -n "$TMUX" ]; then
+    tmux set-environment VIRTUAL_ENV "$VIRTUAL_ENV"
+  fi
+}
+# Load Python virtual environment if VIRTUAL_ENV is set
+if [ -n "$VIRTUAL_ENV" ]; then
+    source "$VIRTUAL_ENV/bin/activate"
+fi
+
