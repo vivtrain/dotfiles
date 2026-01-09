@@ -80,9 +80,9 @@ alias prod='git switch production'
 alias dev='git switch development'
 
 
-# # Windows Clipboard Access
-alias clip='clip.exe'
-alias paste='powershell.exe Get-Clipboard'
+# # Ubuntu Clipboard
+alias clip='xclip -selection clipboard'
+alias paste='xclip -out'
 
 
 # # Colors and highlights
