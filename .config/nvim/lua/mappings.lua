@@ -71,3 +71,7 @@ unmap("n", "<leader>fz")
 map("n", "<leader>tf", "<cmd> Telescope current_buffer_fuzzy_find <cr>", desc "Telescope Fuzzy find in current buffer")
 map("n", "<leader>fg", "<cmd> Telescope git_files <cr>", desc "Telescope Find files in current git repo")
 
+map("n", "<leader>4", "<cmd> set tabstop=4 softtabstop=4 shiftwidth=4 <cr>", desc "Tabbing Set tab width to 4")
+map("n", "<leader>2", "<cmd> set tabstop=2 softtabstop=2 shiftwidth=2 <cr>", desc "Tabbing Set tab width to 2")
+
+
