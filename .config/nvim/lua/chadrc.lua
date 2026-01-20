@@ -9,7 +9,7 @@ config.base46 = {
   changed_themes = {
     catppuccin = {
       base_30 = {
-        red = "#F38ba8",
+        red = "#F38BA8",
         light_grey = "#808090",
         grey = "#505060",
         black = "#202025",
@@ -24,6 +24,7 @@ config.base46 = {
     CursorLineNr = { fg = "white" },
     WinSeparator = { fg = "light_grey" },
     Comment = { fg = "light_grey" },
+    ["@comment"] = { link = "Comment" },
     CmpPmenu = { bg = "darker_black" },
     CmpBorder = { fg = "grey", bg = "darker_black" },
     NvDashFooter = { fg = "green" },
