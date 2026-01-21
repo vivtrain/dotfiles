@@ -1,0 +1,108 @@
+// Place your key bindings in this file to override the defaults
+[
+// Use tab/shift+tab to cycle through suggestions
+  {
+    "key": "tab",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "shift+tab",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetVisible && textInputFocus"
+  },
+// Use j/k to cycle through quickopen menus
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.quickOpenSelectNext",
+    "when": "inQuickOpen"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.quickOpenSelectPrevious",
+    "when": "inQuickOpen"
+  },
+// Use ctrl+h/j/k/l to move between windows on the workbench
+  {
+    "key": "ctrl+h",
+    "command": "workbench.action.navigateLeft",
+    "when": "!inQuickOpen"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.navigateDown",
+    "when": "!inQuickOpen"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.navigateUp",
+    "when": "!inQuickOpen"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "workbench.action.navigateRight",
+    "when": "!inQuickOpen"
+  },
+// Use ctrl+h/j/k/l to navigate in vim Insert mode
+  {
+    "key": "ctrl+h",
+    "command": "cursorLeft",
+    "when": "editorTextFocus && vim.mode == 'Insert'"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "cursorDown",
+    "when": "editorTextFocus && vim.mode == 'Insert'"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "cursorUp",
+    "when": "editorTextFocus && vim.mode == 'Insert'"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "cursorRight",
+    "when": "editorTextFocus && vim.mode == 'Insert'"
+  },
+// Add and remove files/folders in the explorer view
+  {
+    "key": "a",
+    "command": "explorer.newFile",
+    "when": "explorerViewletFocus && !inputFocus"
+  },
+  {
+    "key": "shift+a",
+    "command": "explorer.newFolder",
+    "when": "explorerViewletFocus && !inputFocus"
+  },
+  {
+    "key": "x",
+    "command": "moveFileToTrash",
+    "when": "explorerViewletFocus && !inputFocus"
+  },
+  {
+    "key": "u",
+    "command": "undo",
+    "when": "explorerViewletFocus && !inputFocus"
+  },
+  {
+    "key": "shift+u",
+    "command": "redo",
+    "when": "explorerViewletFocus && !inputFocus"
+  },
+// Don't open the panel with ctrl+j and use escape to close it
+  {
+    "key": "ctrl+j",
+    "command": "-workbench.action.togglePanel",
+  },
+  {
+    "key": "escape",
+    "command": "workbench.action.closePanel",
+    "when": "panelFocus"
+  },
+// Close the stupid error box
+  {
+    "key": "ctrl+/",
+    "command": "notifications.clearAll"
+  }
+]
