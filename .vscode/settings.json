@@ -1,0 +1,67 @@
+{
+  // Base Editor Settings
+  "editor.suggest.selectionMode": "never", // don't autoselect suggestions
+  "editor.autoClosingOvertype": "always", // overwrite closing brackets
+  "editor.minimap.enabled": false, // disable bc it's too big
+  "window.zoomLevel": -1,
+
+  // VscodeVim Settings
+  "vim.leader": " ",
+  "vim.matchpairs": "(:),{:},[:],<:>,\":\",':',`:`",
+  "vim.handleKeys": { // true => vim handles, false => vscode handles
+    "<C-d>": true,
+    "<C-s>": false,
+    "<C-z>": false,
+    "<C-p>": false,
+  },
+  "vim.normalModeKeyBindings": [
+    { // make Y make sense
+      "before": ["Y"],
+      "after": ["y", "$"]
+    },
+    { // use U to redo
+      "before": ["U"],
+      "after": ["<c-r>"]
+    },
+    { // use 0 for ^ bc I don't like pressing ^
+      "before": ["0"],
+      "after": ["^"]
+    },
+  ],
+
+  // Colors
+  "workbench.colorTheme": "Catppuccin Noir",
+  "editor.tokenColorCustomizations": {
+    "[Catppuccin Noir]": {
+      "numbers": "#A6E3A1",
+      "keywords": "#c799ff",
+    }
+  },
+  "editor.semanticTokenColorCustomizations": {
+    "enabled": true,
+    "[Catppuccin Noir]": {
+      "enabled": true,
+      "rules": {
+        "property.readonly": {
+          "italic": true,
+          "foreground": "#40c6ff"
+        },
+        "property": "#bfcdff",
+        "variable": "#c6def5",
+        "namespace": "#bf73bf",
+        "enum": "#668cff",
+        "enumMember": "#40c6ff",
+        "class": "#668cff",
+        "annotation": "#6bc7be",
+        "method": "#97c0fc",
+      }
+    }
+  },
+
+  // Python
+  "python.defaultInterpreterPath": "c:\\Python312\\python.exe",
+
+  // Latex
+  "latex-workshop.latex.outDir": "%DIR%/build",
+  "explorer.confirmDelete": false,
+}
