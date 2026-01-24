@@ -33,8 +33,6 @@ alias mkdir='mkdir -m u=rwx,g=r,o=r'
 
 # # Shortcuts
 alias tm='tmux new-session -A -s tmux'
-alias py='python'
-alias py3='python3'
 alias mk='make'
 alias km='make'
 alias mkr='make && echo "" && ./run'
@@ -45,7 +43,7 @@ alias mkc='make clean'
 alias vs='vim -S'
 alias nvs='nvim -S'
 alias omp='oh-my-posh'
-alias prettyjson='python -m json.tool'
+alias open='xdg-open'
 function bn {
   if [ $# -eq 1 ]; then
     basename `realpath $1`
@@ -53,14 +51,12 @@ function bn {
     basename `realpath .`
   fi
 }
-function completeProblem (
-  if [[ $PWD == *Grind75* ]]; then
-    git commit -m "Completed `realpath . | sed 's:^.*Grind75/::'`"
-  else
-    echo "Not in Grind75 directory"
-    exit 1
-  fi
-)
+
+# # Python
+alias py='python'
+alias py3='python3'
+alias prettyjson='python -m json.tool'
+alias mkvenv='python -m venv venv'
 
 
 # # Git
