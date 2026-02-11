@@ -185,4 +185,11 @@ function ldvenv {
 if [ -n "$VIRTUAL_ENV" ]; then
     source "$VIRTUAL_ENV/bin/activate"
 fi
+# Unload Python venv (and remove from tmux session)
+function unldvenv {
+  deactivate
+  if [ -n "$TMUX" ]; then
+    tmux set-environment -u VIRTUAL_ENV
+  fi
+}
 
