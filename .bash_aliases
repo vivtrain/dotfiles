@@ -76,11 +76,6 @@ alias prod='git switch production'
 alias dev='git switch development'
 
 
-# # Ubuntu Clipboard
-alias clip='xclip -selection clipboard'
-alias paste='xclip -out'
-
-
 # # Colors and highlights
 export    NORMAL_COLOR='\e[0m'
 export           BLACK='\e[30m'
