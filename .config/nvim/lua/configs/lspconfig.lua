@@ -1,4 +1,4 @@
-local lspconfig = require "lspconfig"
+local lspconfig = vim.lsp.config
 local nvlsp = require "nvchad.configs.lspconfig"
 
 local function custom_nv_defaults()
@@ -84,15 +84,15 @@ end
 
 custom_nv_defaults()
 
-lspconfig.pyright.setup({
+vim.lsp.config("pyright", {
   filetypes = { "python" },
 })
 
-lspconfig.clangd.setup({
+vim.lsp.config("clangd", {
   filetypes = { "cpp", "c", "cc", "h", "tpp", "mpp" },
 })
 
-lspconfig.ts_ls.setup({
+vim.lsp.config("ts_ls", {
   filetypes = {
     "javascript",
     "javascriptreact",
@@ -101,7 +101,7 @@ lspconfig.ts_ls.setup({
   },
 })
 
-lspconfig.tailwindcss.setup({
+vim.lsp.config("tailwindcss", {
   filetypes = {
     "javascript",
     "javascriptreact",
@@ -110,7 +110,7 @@ lspconfig.tailwindcss.setup({
   },
 })
 
-lspconfig.eslint.setup({
+vim.lsp.config("eslint", {
   filetypes = {
     "javascript",
     "javascriptreact",
@@ -119,10 +119,10 @@ lspconfig.eslint.setup({
   },
 })
 
-lspconfig.cssls.setup({
+vim.lsp.config("cssls", {
 })
 
-lspconfig.intelephense.setup({
+vim.lsp.config("intelephense", {
   filetypes = {
     "php"
   }
