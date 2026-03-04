@@ -29,6 +29,11 @@ set -o physical
 # Disable overwriting of files via redirection
 set -o noclobber
 
+# Welcome message
+welcome() {
+  source ~/.local/scripts/welcome.sh
+}
+
 # # History # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 HISTCONTROL=ignoreboth      # no duplicate lines or lines starting with space
 shopt -s histappend         # append to the history file instead of overwriting

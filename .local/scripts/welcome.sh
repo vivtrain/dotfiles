@@ -1,3 +1,4 @@
+cd ~
 clear
 echo -e '\e[97m
 
