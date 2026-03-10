@@ -32,6 +32,9 @@ set -o noclobber
 # Welcome message
 welcome() {
   source ~/.local/scripts/welcome.sh
+  if [ -n "$VIRTUAL_ENV" ]; then
+    unldvenv
+  fi
 }
 
 # # History # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
