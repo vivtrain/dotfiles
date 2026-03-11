@@ -67,6 +67,7 @@ alias mkvenv='python -m venv venv'
 # # Git
 alias gs='git status'
 alias gl='git log --graph'
+alias gt='git log --graph --all --oneline --decorate --topo-order'
 alias ga='git add'
 alias gap='git add --patch'
 alias gc='git commit'
