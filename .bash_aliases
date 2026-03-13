@@ -30,6 +30,8 @@ alias x='exit'
 
 alias mkdir='mkdir -m u=rwx,g=r,o=r'
 
+alias please='sudo'
+
 
 # # Shortcuts
 alias tm='tmux new-session -A -s tmux'
