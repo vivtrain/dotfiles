@@ -80,8 +80,7 @@ alias gds='git diff --staged'
 alias gf='git fetch origin'
 alias gr='cd $(git rev-parse --show-toplevel)'
 alias grd='git rev-parse --show-toplevel'
-alias prod='git switch production'
-alias dev='git switch development'
+alias gsw='git switch'
 
 
 # # Colors and highlights
