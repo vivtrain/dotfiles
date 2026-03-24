@@ -178,6 +178,14 @@ elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /de
   tmux set-environment WELCOMED 1
 fi
 
+# Make python venv
+function mkvenv {
+  dir='venv'
+  if [ -n "$1" ]; then
+    dir=$1
+  fi
+  python -m venv venv
+}
 # Load Python venv (and save into tmux session)
 function ldvenv {
   dir='venv'
