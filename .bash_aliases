@@ -46,6 +46,21 @@ alias vs='vim -S'
 alias nvs='nvim -S'
 alias omp='oh-my-posh'
 alias open='xdg-open'
+# markdown viewer
+function md {
+    if [[ -z "$1" ]]; then
+        echo "Usage: md <file.md>"
+        return 1
+    fi
+
+    if [[ ! -f "$1" ]]; then
+        echo "Error: File '$1' not found"
+        return 1
+    fi
+
+    (retext --preview "`realpath $1`" &>/dev/null &) 2>/dev/null
+}
+# basename of a file
 function bn {
   if [ $# -eq 1 ]; then
     basename `realpath $1`
@@ -78,6 +93,7 @@ alias gp='git push'
 alias gd='git diff'
 alias gds='git diff --staged'
 alias gf='git fetch origin'
+alias gfa='git fetch --all'
 alias gr='cd $(git rev-parse --show-toplevel)'
 alias grd='git rev-parse --show-toplevel'
 alias gsw='git switch'
