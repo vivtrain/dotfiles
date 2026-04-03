@@ -70,10 +70,6 @@ function bn {
 }
 
 
-# # Orin stuff
-alias ssh-orin='ssh dm-tf0@192.168.55.1'
-alias sshfs-orin='sshfs dm-tf0@192.168.55.1:/home/dm /home/vivtrain/DavisMechatronics/orin/'
-
 # # Python
 alias py='python'
 alias py3='python3'
