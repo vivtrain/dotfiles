@@ -256,8 +256,8 @@ return {
           decrement = '<C-x>'
         },
         additions = { -- User defined loops
-          -- {'Foo', 'Bar'},
-          -- {'tic', 'tac', 'toe'}
+          -- {'foo', 'bar', 'baz'}
+          {'drop', 'pick', 'edit', 'squash', 'fixup', 'reword'}
         },
         allow_caps_additions = {
           {'enable', 'disable'} -- includes: Enable → Disable, ENABLE → DISABLE
