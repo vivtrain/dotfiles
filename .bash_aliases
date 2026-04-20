@@ -87,6 +87,7 @@ alias gc='git commit'
 alias gcm='git commit -m'
 alias gca='git commit --amend'
 alias gcan='git commit --amend --no-edit'
+gcf() { git commit --fixup="$1"; }
 alias gp='git push'
 alias gd='git diff'
 alias gds='git diff --staged'
