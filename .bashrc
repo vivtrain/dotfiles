@@ -18,7 +18,7 @@ if [ -z "$TMUX" ]; then
 $PATH"
 fi
 
-export CDPATH='.'
+export CDPATH='.:~/.local/shortcuts'
 
 # Vim as default editor
 EDITOR=nvim
