@@ -74,4 +74,6 @@ map("n", "<leader>fg", "<cmd> Telescope git_files <cr>", desc "Telescope Find fi
 map("n", "<leader>4", "<cmd> set tabstop=4 softtabstop=4 shiftwidth=4 <cr>", desc "Tabbing Set tab width to 4")
 map("n", "<leader>2", "<cmd> set tabstop=2 softtabstop=2 shiftwidth=2 <cr>", desc "Tabbing Set tab width to 2")
 
+map("n", "]x", "/^<<<<<<<<cr>", desc "Jump Next merge conflict")
+map("n", "[x", "?^<<<<<<<<cr>", desc "Jump Previous merge conflict")
 
