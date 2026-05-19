@@ -68,6 +68,15 @@ function bn {
     basename `realpath .`
   fi
 }
+# mount an orin as a file system over ssh
+function sfs {
+  if [ -z "$1" ]; then
+    echo "USAGE: sshfs-orin TARGET"
+    return
+  fi
+  umount ~/DavisMechatronics/orin 2>/dev/null
+  sshfs "$1":/ ~/DavisMechatronics/orin/
+}
 
 
 # # Python
