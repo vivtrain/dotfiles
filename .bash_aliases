@@ -77,6 +77,8 @@ function sfs {
   umount ~/DavisMechatronics/orin 2>/dev/null
   sshfs "$1":/ ~/DavisMechatronics/orin/
 }
+# today's date, easy for logs and lex sort
+alias today='date +%Y%m%d'
 
 
 # # Python
