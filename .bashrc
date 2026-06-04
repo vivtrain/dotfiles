@@ -188,9 +188,12 @@ function mkvenv {
 }
 # Load Python venv (and save into tmux session)
 function ldvenv {
-  dir='venv'
   if [ -n "$1" ]; then
     dir=$1
+  elif [ -d venv ]; then
+    dir='venv'
+  elif [ -d .venv ]; then
+    dir='.venv'
   fi
   source "$dir/bin/activate"
   if [ -n "$TMUX" ]; then
