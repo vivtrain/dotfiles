@@ -107,6 +107,9 @@ alias gfa='git fetch --all'
 alias gr='cd $(git rev-parse --show-toplevel)'
 alias grd='git rev-parse --show-toplevel'
 alias gsw='git switch'
+gg() {
+  git-graph --style round --model none --color always "$@" 2>/dev/null | less -R
+}
 
 
 # # Colors and highlights

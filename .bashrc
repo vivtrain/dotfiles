@@ -219,3 +219,5 @@ export LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=/home/vivtrain/data/recordings
 # Claude
 export CLAUDE_CODE_NO_FLICKER=1
 
+# Rust (Cargo enviornment variables)
+. "$HOME/.cargo/env"
