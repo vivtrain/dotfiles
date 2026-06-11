@@ -108,7 +108,12 @@ alias gr='cd $(git rev-parse --show-toplevel)'
 alias grd='git rev-parse --show-toplevel'
 alias gsw='git switch'
 gg() {
-  git-graph --style round --model none --color always "$@" 2>/dev/null | less -R
+  git-graph \
+    --style round \
+    --model none \
+    --color always \
+    "$@" \
+    2>/dev/null | less -RS
 }
 
 
@@ -157,5 +162,22 @@ function color {
   echo -ne $1
   ${@:2}
   echo -ne $NO_COLOR
+}
+
+# Davis Mechatronics logs
+dml() {
+  local pattern="${1:-}"
+  local logdir="/opt/dm/logs"
+  if [[ -z "$pattern" ]]; then
+      echo "Usage: dml <pattern>"
+      echo "Example: dml vision"
+      return 1
+  fi
+  local logfile=$(ls -1 "$logdir"/*"$pattern"* 2>/dev/null | sort | tail -1)
+  if [[ -z "$logfile" ]]; then
+      echo "No log file matching '$pattern' found in $logdir"
+      return 1
+  fi
+  less +G "$logfile"
 }
 

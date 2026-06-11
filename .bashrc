@@ -18,16 +18,16 @@ if [ -z "$TMUX" ]; then
 $PATH"
 fi
 
+# CD shortcuts go here
 export CDPATH='.:~/.local/shortcuts'
 
-# Vim as default editor
+# Neovim as default editor
 EDITOR=nvim
-# Vi-like line editing on the command line
-set -o vi
-# Use physical directories for cd instead of symbolic links
-set -o physical
-# Disable overwriting of files via redirection
-set -o noclobber
+
+# POSIX shell opts
+set -o vi         # Vi-like line editing on the command line
+set -o physical   # Use physical directories for cd instead of symbolic links
+set -o noclobber  # Disable overwriting of files via redirection
 
 # Welcome message
 welcome() {
@@ -37,7 +37,7 @@ welcome() {
   fi
 }
 
-# # History # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# History
 HISTCONTROL=ignoreboth      # no duplicate lines or lines starting with space
 shopt -s histappend         # append to the history file instead of overwriting
 HISTSIZE=1000
@@ -76,7 +76,7 @@ else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
-# Set custom capabilities man
+# Set color capabilities of man
 if [ "$color_prompt" = yes ]; then
   export MANPAGER="less -R --use-color -DSkY -DEwr"
 fi
@@ -84,8 +84,7 @@ fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
+case "$TERM" in xterm*|rxvt*)
     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
     ;;
 *)
@@ -102,7 +101,7 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # colored GCC warnings and errors
- export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 ### Other Sources ##############################################################
 # Alias definitions.
