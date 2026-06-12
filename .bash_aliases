@@ -17,7 +17,7 @@ alias ll='ls -lhXv'
 alias la='ls -A'
 alias lla='ll -A'
 alias l='ll'
-alias tree='tree -vC'
+alias tree='tree -vC -I "venv|.venv|__pycache__|*.pyc|.git|node_modules|.mypy_cache|.pytest_cache"'
 alias treeg='tree --gitignore'
 
 alias ppd='popd'
