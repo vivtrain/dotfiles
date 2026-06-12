@@ -1,0 +1,18 @@
+[user]
+	email = k99vivek@gmail.com
+	name = Vivek Kumar
+[core]
+	pager = less -S -R
+	editor = nvim
+[alias]
+  please = "push --force-with-lease"
+  rbc = "rebase --continue"
+  rbi = "rebase --interactive"
+  rba = "rebase --abort"
+  unstage = "restore --staged"
+  sw = "switch"
+  ch = "checkout"
+  ours = "checkout --ours"
+  theirs = "checkout --theirs"
+[merge]
+	tool = nvimdiff
