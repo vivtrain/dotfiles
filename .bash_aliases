@@ -113,7 +113,7 @@ gg() {
     --model none \
     --color always \
     "$@" \
-    2>/dev/null | less -RS
+    2>/dev/null | less -RS --shift 8
 }
 
 
