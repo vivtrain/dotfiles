@@ -108,12 +108,9 @@ alias gr='cd $(git rev-parse --show-toplevel)'
 alias grd='git rev-parse --show-toplevel'
 alias gsw='git switch'
 gg() {
-  git-graph \
-    --style round \
-    --model none \
-    --color always \
-    "$@" \
-    2>/dev/null | less -RS --shift 8
+  git-graph --style round --model minimal --color always "$@" 2>/dev/null \
+    | GGW_COLS="$(tput cols)" python3 ~/.local/scripts/ggwrap.py \
+    | less -RS --shift 8
 }
 
 
