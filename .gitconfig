@@ -12,6 +12,7 @@
   unstage = "restore --staged"
   sw = "switch"
   ch = "checkout"
+  cb = "checkout -b"
   ours = "checkout --ours"
   theirs = "checkout --theirs"
 [merge]
