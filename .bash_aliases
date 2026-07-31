@@ -102,8 +102,8 @@ gcf() { git commit --fixup="$1"; }
 alias gp='git push'
 alias gd='git diff'
 alias gds='git diff --staged'
-alias gf='git fetch origin'
-alias gfa='git fetch --all'
+alias gf='git fetch origin --prune'
+alias gfa='git fetch --all --prune'
 alias gr='cd $(git rev-parse --show-toplevel)'
 alias grd='git rev-parse --show-toplevel'
 alias gsw='git switch'
@@ -111,6 +111,20 @@ gg() {
   git-graph --style round --model minimal --color always "$@" 2>/dev/null \
     | GGW_COLS="$(tput cols)" python3 ~/.local/scripts/ggwrap.py \
     | less -RS --shift 8
+}
+
+# tab-completion for `git rmb` (~/.local/scripts/git-rmb.sh): delete branches locally
+# + on their upstream. git's completion calls _git_<subcommand> if it exists.
+# Completes at every position (rmb takes many branches), skipping ones already typed.
+_git_rmb() {
+  local def excl i
+  def=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+  def="${def#origin/}"
+  excl="HEAD main master $def"
+  for ((i = 2; i < cword; i++)); do excl+=" ${words[i]}"; done
+  __gitcomp_nl "$( { git for-each-ref --format='%(refname:strip=2)' refs/heads
+                     git for-each-ref --format='%(refname:strip=3)' refs/remotes
+                   } | sort -u | grep -vxF "$(printf '%s\n' $excl)" )"
 }
 
 
