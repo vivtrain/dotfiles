@@ -79,6 +79,7 @@ function sfs {
 }
 # today's date, easy for logs and lex sort
 alias today='date +%Y%m%d'
+alias ts='tailscale'
 
 
 # # Python
