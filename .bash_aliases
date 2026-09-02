@@ -5,11 +5,10 @@ alias view='nvim -R'
 alias vb='vim ~/.bashrc'
 alias sb='source ~/.bashrc'
 alias vba='vim ~/.bash_aliases'
-
 alias vc='vim ~/.vimrc'
-
 alias tc='vim ~/.tmux.conf'
 alias st='tmux source-file ~/.tmux.conf'
+alias nvssh='nvim ~/.ssh/config'
 
 
 # File system/shell navigation
@@ -193,3 +192,16 @@ dml() {
   less +G "$logfile"
 }
 
+# svi() {
+#   set -o vi
+#   export EDITOR=vim
+# }
+#
+# alias start-master='sudo systemctl start master-monitor'
+# alias stop-master='sudo systemctl stop master-monitor'
+# alias enable-master='sudo systemctl enable master-monitor'
+# alias disable-master='sudo systemctl disable master-monitor'
+# alias restart-master='sudo systemctl restart master-monitor'
+# alias status-master='sudo systemctl status master-monitor'
+# alias restart-zed='sudo systemctl restart zed_x_daemon'
+#
