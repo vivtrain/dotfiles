@@ -70,11 +70,11 @@ function bn {
 # mount an orin as a file system over ssh
 function sfs {
   if [ -z "$1" ]; then
-    echo "USAGE: sshfs-orin TARGET"
+    echo "USAGE: $0 TARGET"
     return
   fi
-  umount ~/DavisMechatronics/orin 2>/dev/null
-  sshfs "$1":/ ~/DavisMechatronics/orin/
+  umount ~/orin/ 2>/dev/null
+  sshfs "$1":/ ~/orin/
 }
 # today's date, easy for logs and lex sort
 alias today='date +%Y%m%d'
