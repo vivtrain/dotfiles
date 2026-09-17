@@ -23,6 +23,7 @@ export CDPATH='.:~/.local/shortcuts'
 
 # Neovim as default editor
 EDITOR=nvim
+VISUAL=nvim
 
 # POSIX shell opts
 set -o vi         # Vi-like line editing on the command line
