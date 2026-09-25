@@ -79,6 +79,8 @@ function sfs {
 # today's date, easy for logs and lex sort
 alias today='date +%Y%m%d'
 alias ts='tailscale'
+# like ~/.bashrc's `alert`, but critical urgency so it shows through Do Not Disturb (stays until dismissed)
+alias alertc='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alertc$//'\'')"'
 
 
 # # Python
