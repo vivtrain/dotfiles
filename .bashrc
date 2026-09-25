@@ -11,7 +11,9 @@ esac
 
 # Check if tmux has been started. If not, then set the path
 if [ -z "$TMUX" ]; then
+    # snap tmux's real binary: /snap/bin/tmux goes through `snap run` (~55ms/call)
     export PATH="\
+/snap/tmux/current/usr/local/bin:\
 /opt/nvim-linux64/bin:\
 /home/vivtrain/.local/bin/:\
 /usr/local/cuda/bin/:\
