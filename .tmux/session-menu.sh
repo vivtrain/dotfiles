@@ -1,17 +1,22 @@
 #!/bin/sh
-# Show a menu of sessions, marking the current one ($1) with '*'. tmux 3.2a's
-# display-menu has no -C to preselect an item (added in 3.4), so mark it instead.
-# Sessions are ordered by creation (session_id) to match switch-session.sh.
+# Show a menu of sessions with the current one ($1) marked with a leading icon
+# and preselected via display-menu -C (tmux 3.4+). Sessions are ordered by
+# creation (session_id) to match switch-session.sh.
 cur=$1
+mark=''
 list=$(tmux list-sessions -F '#{session_id} #S' | tr -d '$' | sort -n)
 set --
 n=0
+sel=0
 while read -r id s; do
+    label="  $s"
+    if [ "$s" = "$cur" ]; then
+        label="#[fg=green]$mark#[default] $s"
+        sel=$n
+    fi
     n=$((n + 1))
-    label=$s
-    [ "$s" = "$cur" ] && label="$s *"
     set -- "$@" "$label" "$n" "switch-client -t \$$id"
-done <<EOF
+done <<EOF2
 $list
-EOF
-tmux display-menu -T " Switch Sessions " "$@"
+EOF2
+tmux display-menu -C "$sel" -S fg=cyan -H bg=#1e4d2b,fg=#ffffff -b rounded -T "#[fg=cyan]#[bg=cyan,fg=black,bold]Switch Sessions#[bg=default,fg=cyan,nobold]" "$@"

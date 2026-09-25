@@ -3,9 +3,7 @@
 # numbering stays gapless when sessions are killed. Errors go to the status
 # line; always exit 0 so run-shell doesn't take over the pane.
 msg() {
-    # display-message -c is broken in tmux 3.2a, so target the client's pane
-    pane=$(tmux list-clients -F '#{client_name} #{pane_id}' | awk -v c="$2" '$1 == c { print $2 }')
-    tmux display-message ${pane:+-t "$pane"} "$1"
+    tmux display-message -c "$2" "$1"
 }
 id=$(tmux list-sessions -F '#{session_id}' | tr -d '$' | sort -n | sed -n "${1}p")
 if [ -z "$id" ]; then
