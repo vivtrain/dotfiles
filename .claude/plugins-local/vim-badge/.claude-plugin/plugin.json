@@ -1,0 +1,1 @@
+{ "name": "vim-badge", "version": "0.1.0", "description": "Redraws the vim mode label as a colored badge, and logs the footer props it sees" }
