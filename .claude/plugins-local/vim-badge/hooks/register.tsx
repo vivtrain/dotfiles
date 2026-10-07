@@ -52,7 +52,7 @@ export const register: Register = on => {
     if (e.surface !== 'terminal' || !e.props.isFirstOfReply) return next(e)
     const { Box, Text, Markdown } = $.ui.resolve(e)
     return (
-      <Box flexDirection="row">
+      <Box flexDirection="row" marginTop={1}>
         <Box width={2} flexShrink={0}>
           <Text color="#d97757">●</Text>
         </Box>

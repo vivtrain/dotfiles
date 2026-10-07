@@ -40,6 +40,7 @@ test('draws the end-of-turn line: orange flower, white text', async $ => {
 
 test('draws an orange bullet on the first block of a reply', async $ => {
   const first = await $.ui.mount({ plugin: 'vim-badge', component: 'AssistantMessage', surface: 'terminal', props: { text: 'Hello **there**', isFirstOfReply: true } })
+  expect(await first.drawn()).toMatchObject({ type: 'Box', props: { marginTop: 1 } })
   expect(await first.find({ type: 'Text', text: '●' })).toMatchObject({ props: { color: '#d97757' } })
   expect(await first.find({ type: 'Markdown' })).toMatchObject({ props: { text: 'Hello **there**' } })
 })
