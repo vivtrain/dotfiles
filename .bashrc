@@ -41,7 +41,7 @@ welcome() {
 }
 
 # History
-HISTCONTROL=ignoreboth      # no duplicate lines or lines starting with space
+HISTCONTROL=ignoredups      # no duplicate lines
 shopt -s histappend         # append to the history file instead of overwriting
 HISTSIZE=1000
 HISTFILESIZE=2000
