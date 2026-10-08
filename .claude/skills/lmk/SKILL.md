@@ -22,6 +22,7 @@ setsid ~/.claude/skills/lmk/lmk.py "<question>" >/dev/null 2>&1 < /dev/null &
 - Critical notifications stay on screen until dismissed, so send one per question, not repeats.
 - Keep the question to one line, under roughly 100 characters. Summarize it if the full question is long.
 - If you're not inside tmux, the label falls back to `claude` and clicking does nothing. Still send the notification.
+- The headline message size needs to be <46 chars, since that's what is viewable without getting cutoff by ellipses.
 
 ## When
 
