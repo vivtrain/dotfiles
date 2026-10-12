@@ -7,8 +7,9 @@ const LABEL = /-- (INSERT|VISUAL(?: LINE| BLOCK)?) --\s*/
 // The permission-mode pill's "(shift+tab to cycle)" reminder, and the separator after it.
 const CYCLE_HINT = /\(shift\+tab to cycle\)(\s*·\s*)?/
 
+// VISUAL uses the omp theme's branch pink (~/.think.omp.json).
 const COLORS: Record<string, string> = { NORMAL: 'blue', INSERT: 'green' }
-const colorFor = (mode: string) => COLORS[mode] ?? (mode.startsWith('VISUAL') ? 'magenta' : 'white')
+const colorFor = (mode: string) => COLORS[mode] ?? (mode.startsWith('VISUAL') ? '#ff4499' : 'white')
 
 // DECSCUSR: steady block for NORMAL/VISUAL, steady bar for INSERT.
 const cursorFor = (mode: string) => (mode === 'INSERT' ? '\x1b[6 q' : '\x1b[2 q')
@@ -85,9 +86,9 @@ export const register: Register = on => {
     const { Box, Text } = $.ui.resolve(e)
     return (
       <Box>
-        <Text color={color}>{'\ue0ba'}</Text>
-        <Text color="black" backgroundColor={color} bold>{` ${mode} `}</Text>
-        <Text color={color}>{'\ue0b8'}</Text>
+        <Text color={color}>{'\ue0b6'}</Text>
+        <Text color="black" backgroundColor={color} bold>{mode}</Text>
+        <Text color={color}>{'\ue0b4'}</Text>
         {rest ? <Text dimColor> {rest}</Text> : null}
       </Box>
     )
