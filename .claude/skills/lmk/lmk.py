@@ -71,13 +71,18 @@ def focus_pane():
         subprocess.run(["wmctrl", "-i", "-a", hex(int(win))])
 
 
+# Claude Code crab as pixel art, squared up to fill the notification's square icon slot.
+# GNOME caches icons by path: bump the filename when redrawing it.
+ICON = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clawd-v5.svg")
+
+
 def main():
     question = " ".join(sys.argv[1:]) or "Claude needs your input"
     if PANE and already_visible():
         return
     Notify.init("claude-alert")
     loop = GLib.MainLoop()
-    n = Notify.Notification.new(f"{location()}: {question}", None, "dialog-question")
+    n = Notify.Notification.new(f"{location()}: {question}", None, ICON)
     n.set_urgency(Notify.Urgency.CRITICAL)
     if PANE:
         n.add_action("default", "Go to pane", lambda *_: (focus_pane(), loop.quit()))
