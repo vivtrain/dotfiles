@@ -31,11 +31,11 @@ test('badges the mode, drops the cycle hint, and sets the cursor once per change
   }
 })
 
-test('draws the end-of-turn line: orange flower, white text', async $ => {
+test('draws the end-of-turn line: orange flower, omp-teal text', async $ => {
   const ui = await $.ui.mount({ plugin: 'vim-badge', component: 'TurnDuration', surface: 'terminal', props: { word: 'Baked', durationMs: 64_000 } })
   expect(await ui.drawn()).toMatchObject({ type: 'Box', props: { marginTop: 1 } })
   expect(await ui.find({ type: 'Text', text: '✻' })).toMatchObject({ props: { color: '#d97757' } })
-  expect(await ui.find({ type: 'Text', text: 'Baked for 1m 4s' })).toMatchObject({ props: { color: 'whiteBright' } })
+  expect(await ui.find({ type: 'Text', text: 'Baked for 1m 4s' })).toMatchObject({ props: { color: '#73a7a7' } })
 })
 
 test('draws an orange bullet on the first block of a reply', async $ => {
@@ -43,4 +43,18 @@ test('draws an orange bullet on the first block of a reply', async $ => {
   expect(await first.drawn()).toMatchObject({ type: 'Box', props: { marginTop: 1 } })
   expect(await first.find({ type: 'Text', text: '●' })).toMatchObject({ props: { color: '#d97757' } })
   expect(await first.find({ type: 'Markdown' })).toMatchObject({ props: { text: 'Hello **there**' } })
+})
+
+test('stamps the end-of-turn line with the time its turn ended, omp-style', async ($, on) => {
+  on('process.run', (_$, e) => ({ value: { exitCode: 0, stdout: e.argv[0] === 'date' ? '10:29:30 am\n' : '', stderr: '' } }))
+  on('turn.complete', () => ({ text: '' }))
+  await $.turn.complete({ answer: '', durationMs: 12_000, isAborted: false, turnId: 't1', reason: 'end_turn' } as never)
+  const ui = await $.ui.mount({ plugin: 'vim-badge', component: 'TurnDuration', surface: 'terminal', props: { word: 'Cooked', durationMs: 12_000 } })
+  expect(await ui.find({ type: 'Text', text: 'Cooked for 12s' })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: '\uf017 10:29:30 am' })).toMatchObject({ props: { color: '#00ffff' } })
+})
+
+test('draws no timestamp for a line with no recorded turn', async $ => {
+  const ui = await $.ui.mount({ plugin: 'vim-badge', component: 'TurnDuration', surface: 'terminal', props: { word: 'Baked', durationMs: 99_000 } })
+  expect(await ui.find({ type: 'Text', text: ' at ' })).toBeUndefined()
 })
