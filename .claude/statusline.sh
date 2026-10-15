@@ -42,14 +42,14 @@ if [ -n "$branch" ]; then
       MERGED) icon=$'\uf17f' ;;
       *)      icon=$'\uf407' ;;
     esac
-    case $review in
-      pending)  fg='38;5;11' bg='48;5;11' ;;
-      approved) fg=32 bg=42 ;;
-      changes)  fg=31 bg=41 ;;
-      *)        fg=37 bg=47 ;;
+    case $review in  # truecolor (kitty theme's hexes) so caps and body resolve to the same shade
+      pending)  rgb='249;226;175' ;;
+      approved) rgb='166;227;161' ;;
+      changes)  rgb='243;139;168' ;;
+      *)        rgb='255;255;255' ;;
     esac
-    printf '\n\e]8;;%s\e\\\e[%sm\ue0b6\e[%s;38;2;0;0;0;1m%s %s\e[22;49;%sm\ue0b4\e[38;5;146m %s\e[0m\e]8;;\e\\' \
-      "$url" "$fg" "$bg" "$icon" "$num" "$fg" "$title"
+    printf '\n\e]8;;%s\e\\\e[38;2;%sm\ue0b6\e[48;2;%s;38;2;0;0;0;1m%s %s\e[22;49;38;2;%sm\ue0b4\e[38;5;146m %s\e[0m\e]8;;\e\\' \
+      "$url" "$rgb" "$rgb" "$icon" "$num" "$rgb" "$title"
   fi
 fi
 exit 0
