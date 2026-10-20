@@ -67,3 +67,15 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
   - Always name worktrees in a semantically comprehensible way, not just generic `agent1234...`.
     For example, `seg-autolabel` rather than `agent-a3f9c1`.
 - Clean up worktrees and branches associated opportunistically.
+
+## Code review
+
+- In robocore and its vendees (repos that vendor robocore as `core/`: ahs, stereo_camera_playground,
+  uarm_playground, terabase/{lander,robofab,telehandler,connector_robot}), do reviews with the repo's
+  own reviewer agent, not a stock review agent or the generic `/code-review` skill.
+  - Default is `code-change-reviewer` (from robocore's `.claude/agents/`). If the repo defines its
+    own reviewer (e.g. telehandler `code-reviewer`, connector_robot `standards-compliance-reviewer`),
+    prefer that one.
+  - Pass it the original user request, as its description asks.
+  - If the agent isn't offered as a `subagent_type` (e.g. it lives only in `core/.claude/agents/`),
+    read its `.md` and run a general-purpose agent with that file as its instructions.
