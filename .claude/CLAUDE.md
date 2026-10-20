@@ -37,6 +37,10 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
 - Installed: tree, fzf, rg, jq, gh, uv, git-graph, xclip, sshfs, tailscale, nvim, tmux.
 - Not installed: fd, bat, delta, pandoc, typst, yq, tig.
 - My `tree` alias ignores venv/.venv/__pycache__/.git/node_modules/caches; `treeg` = `tree --gitignore`.
+- `pgrep -f` / `pkill -f` / `ps | grep` match your own Bash tool shell, whose command line contains
+  the pattern. Bracket one character so the pattern doesn't match itself: `pgrep -af '[m]y_node'`,
+  `pkill -f '[m]y_node'`, `ps aux | grep '[m]y_node'`. Or use `pgrep -x`/`pkill -x` on the exact
+  process name when `-f` isn't needed.
 
 ## Company devices (SSH)
 
