@@ -19,6 +19,13 @@ alias l='ll'
 alias tree='tree -vC -I "venv|.venv|__pycache__|*.pyc|.git|node_modules|.mypy_cache|.pytest_cache"'
 alias treeg='tree --gitignore'
 
+# lts [-n N] [dir...]: `l`, newest mtime first, top N (default 10), colors kept
+lts() {
+  local n=10
+  if [[ $1 == -n ]]; then n=$2; shift 2; fi
+  command ls -lht --color=always "$@" | tail -n +2 | head -n "$n"
+}
+
 alias ppd='popd'
 alias pd=pushd $1
 alias bd='cd -'
