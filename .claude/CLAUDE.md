@@ -59,6 +59,14 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
   text: `[/tmp/claude-robofab/image.png](file:///tmp/claude-robofab/image.png)`. These are
   clickable in my terminal; plain paths aren't.
 
+## Other Claude agents
+
+- When mentioning another Claude session to me, call it "the <session> <task> agent", linked to its
+  pane: the [robocore lighting agent](file:///tmux/robocore:2.1). Kitty routes `file:///tmux/` links
+  to a pane jump (open-actions.conf). Never show the raw URL. Peer IDs like `robocore-3f` are for
+  SendMessage only.
+  The `relay` skill's `agents.py` maps peer IDs to tmux location and task.
+
 ## Worktrees
 
 - Prefer to keep the canon directory of a repo on main and keep it fresh.
