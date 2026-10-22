@@ -52,6 +52,7 @@ alias vs='vim -S'
 alias nvs='nvim -S'
 alias omp='oh-my-posh'
 alias open='xdg-open'
+alias cld='claude'
 # markdown viewer
 function md {
     if [[ -z "$1" ]]; then
