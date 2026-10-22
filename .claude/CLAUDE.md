@@ -36,6 +36,8 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
 
 - Installed: tree, fzf, rg, jq, gh, uv, git-graph, xclip, sshfs, tailscale, nvim, tmux.
 - Not installed: fd, bat, delta, pandoc, typst, yq, tig.
+- Google Drive: prefer `rclone` over the Google Drive connector tools. Remote `dm:` is the company
+  shared drive (team_drive set), e.g. `rclone lsf dm:path/`, `rclone copy file dm:path/`.
 - My `tree` alias ignores venv/.venv/__pycache__/.git/node_modules/caches; `treeg` = `tree --gitignore`.
 - `pgrep -f` / `pkill -f` / `ps | grep` match your own Bash tool shell, whose command line contains
   the pattern. Bracket one character so the pattern doesn't match itself: `pgrep -af '[m]y_node'`,
@@ -61,6 +63,8 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
 
 ## Other Claude agents
 
+- Speak when spoken to. Never message a sibling Claude session (SendMessage to a peer) unless I've asked
+  you to, or you're replying to a message it sent you. Subagent <-> parent messages are always fine.
 - When mentioning another Claude session to me, call it "the <session> <task> agent", linked to its
   pane: the [robocore lighting agent](file:///tmux/robocore:2.1). Kitty routes `file:///tmux/` links
   to a pane jump (open-actions.conf). Never show the raw URL. Peer IDs like `robocore-3f` are for

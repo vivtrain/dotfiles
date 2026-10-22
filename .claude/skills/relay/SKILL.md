@@ -7,6 +7,8 @@ description: Find which Claude agent (another Claude Code session in Vivek's tmu
 
 Vivek runs one Claude per task, spread across tmux sessions (named after repos: `robocore`, `lander`, …), windows (sometimes named after the task: `autolabel`, `lighting`), and panes (named after the running command, so a pane name only tells you that it's `claude`). He refers to an agent by whichever handle comes to mind: the repo, the window name, the topic, or the branch. Your job is to turn that handle into a peer name and send with `SendMessage`.
 
+Only relay when Vivek asks you to. Never message a sibling session on your own initiative, even when you think it would help: tell Vivek instead and let him decide. Replying to a message a sibling sent you is fine, and so is talking with your own subagents or parent.
+
 ## 1. Find the agent
 
 ```bash
@@ -45,7 +47,7 @@ The recipient has none of your context. Make the message standalone:
 - Make the first line a standalone sentence saying who it's from and what it's about. The recipient's human sees only that line until they expand the message. Example: `From the dotfiles agent (~:1), at Vivek's request: the autolabel PR needs a rebase.`
 - Include the actual content: paths, commit SHAs, numbers, error text. Don't write "see above" or "the thing we discussed".
 - Quote Vivek's words verbatim when he dictated them. Summarize only when he asked you to pass along your own findings.
-- Say what you want back, if anything ("reply when the PR is updated"). The recipient can reply with `SendMessage` to your peer name.
+- Say what you want back, if anything ("reply when the PR is updated"). Asking for a reply is what permits the recipient to message you. Without that, it shouldn't send you anything.
 - Paths should be absolute. For long material (logs, diffs), write a file under `/tmp/claude-<project>/` and send its path.
 
 Then send it:
