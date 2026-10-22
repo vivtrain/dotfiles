@@ -1,14 +1,14 @@
 #!/bin/sh
 # Show a menu of sessions with the current one ($1) marked with a leading icon
-# and preselected via display-menu -C (tmux 3.4+). Sessions are ordered by
-# creation (session_id) to match switch-session.sh. Pass "mouse" as $2 when
+# and preselected via display-menu -C (tmux 3.4+). Sessions are in session-order.sh
+# order, shared with switch-session.sh. Pass "mouse" as $2 when
 # opened from a click: the menu then handles the mouse (-M) and stays open until
 # a click (-O), but tmux ignores -C for mouse menus so nothing is preselected.
 cur=$1
 flags=''
 [ "$2" = mouse ] && flags='-M -O'
 mark=''
-list=$(tmux list-sessions -F '#{session_id} #S' | tr -d '$' | sort -n)
+list=$(~/.tmux/session-order.sh list)
 set --
 n=0
 sel=0
