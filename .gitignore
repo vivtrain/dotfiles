@@ -3,6 +3,7 @@
 !.config
 .config/*
 !.config/nvim
+!.config/mpv
 
 !.local
 .local/*
