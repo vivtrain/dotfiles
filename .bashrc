@@ -177,7 +177,7 @@ export PHP_INI_SCAN_DIR="/home/vivtrain/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   # anything that needs to happen once on tmux startup
   loadnvm > /dev/null
-  tmux new-session -A -s tmux
+  tmux new-session -A -s dotfiles
 elif command -v tmux &> /dev/null && [ -z `tmux show-environment WELCOMED 2> /dev/null` ]; then
   welcome
   tmux set-environment WELCOMED 1
