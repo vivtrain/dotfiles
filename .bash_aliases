@@ -202,6 +202,25 @@ dml() {
   less +G "$logfile"
 }
 
+# Dictionary: `define` = fuzzy-pick a word with live definition; `define <word>` = look it up,
+# falling back to near-miss suggestions. Needs dict + dictd (+ dict-gcide, dict-wn).
+define() {
+  if [[ -n "$1" ]]; then
+    local out
+    if out=$(dict "$*" 2>/dev/null); then
+      less -FX <<< "$out"
+    else
+      echo "No match for '$*'. Did you mean:"
+      dict -m -s lev "$*" 2>/dev/null || echo "  (nothing close)"
+    fi
+  else
+    # List gets 29 cols (longest word is 23 + fzf's pointer); preview starts at col 30
+    local cols=${COLUMNS:-$(tput cols)}
+    fzf < /usr/share/dict/words --preview 'dict {} 2>/dev/null' \
+      --preview-window="right,$(( cols - 29 )),wrap"
+  fi
+}
+
 # svi() {
 #   set -o vi
 #   export EDITOR=vim
