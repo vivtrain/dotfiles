@@ -61,6 +61,20 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
   text: `[/tmp/claude-robofab/image.png](file:///tmp/claude-robofab/image.png)`. These are
   clickable in my terminal; plain paths aren't.
 
+## Click-to-copy commands
+
+- Whenever you give me a command to run, show it as a click-to-copy link: link text is the command,
+  target is `file:///copy/` + the command percent-encoded (spaces `%20`, `"` `%22`, `&` `%26`, `%`
+  `%25`, `#` `%23`, `?` `%3F`, `(` `%28`, `)` `%29`, `[` `%5B`, `]` `%5D`, `<` `%3C`, `>` `%3E`;
+  everything non-alphanumeric is safest encoded). Left-click copies it (kitty open-actions.conf →
+  `~/.config/kitty/copy-text.sh`). Example:
+  [git push --force-with-lease](file:///copy/git%20push%20--force-with-lease)
+- In the link text, escape markdown-special characters (`[`, `]`, `` ` ``) so it renders; the
+  target is what gets copied.
+- One-liners only. For multi-line commands use a fenced code block, optionally followed by a
+  copy link for the whole thing joined with `&&` or `;` if that's runnable.
+- Works for any short text worth copying (paths, IDs, hashes), not just commands.
+
 ## Other Claude agents
 
 - Speak when spoken to. Never message a sibling Claude session (SendMessage to a peer) unless I've asked
@@ -79,6 +93,16 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
   - Always name worktrees in a semantically comprehensible way, not just generic `agent1234...`.
     For example, `seg-autolabel` rather than `agent-a3f9c1`.
 - Clean up worktrees and branches associated opportunistically.
+
+## main / master
+
+- Always ask me right before any operation that changes main/master itself: merging a PR into it,
+  pushing/force-pushing to it, resetting or rebasing it, closing PRs that target it. Ask at the
+  moment of the operation, even mid-plan.
+- Branch work that only reads main is fine without asking: rebasing a feature branch onto main,
+  merging main into a branch, pushing/force-pushing feature branches, retargeting PRs.
+- Me describing how I want PRs organized or ordered ("merge X before Y") is NOT permission to
+  merge. Do the prep (rebase branches, retarget, fix conflicts), then stop and ask before each merge.
 
 ## Code review
 
