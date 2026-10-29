@@ -1,6 +1,7 @@
 # Copy the link under the mouse (OSC 8 hyperlink target or detected URL) instead of opening it.
 # Runs kitty's normal link click with the window's open_url_handler hook swapped for a copier.
 import subprocess
+from urllib.parse import unquote
 
 from kittens.tui.handler import result_handler
 from kitty.clipboard import set_clipboard_string, set_primary_selection
@@ -17,6 +18,9 @@ def handle_result(args, answer, target_window_id, boss):
         return
 
     def copy(boss, window, url, hyperlink_id, cwd):
+        # file:///copy/<text> links (copy-text.sh) carry the text itself; copy that, not the URL.
+        if url.startswith('file:///copy/'):
+            url = unquote(url.removeprefix('file:///copy/'))
         set_clipboard_string(url)
         set_primary_selection(url)
         # Middle-click inside tmux pastes tmux's buffer, not the X primary selection.
