@@ -51,6 +51,16 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
 - REFERENCE ONLY. Don't ssh, scp, sshfs, or ping these unless I've given permission for that
   specific purpose in the current conversation. Permission for one task doesn't carry over.
 
+## Links
+
+- Start every markdown link's text with the nerdfont mouse glyph `󰍽` (nf-md-mouse, U+F037D) and a
+  space, inside the brackets so the glyph is clickable too, e.g.
+  [󰍽 /tmp/claude-robofab/image.png](file:///tmp/claude-robofab/image.png). kitty only underlines
+  links on hover, so the glyph is what marks them as clickable.
+- Click-to-copy links get the copy glyph `󰆏` (nf-md-content_copy, U+F018F) instead, also inside
+  the brackets: [󰆏 git push --force-with-lease](file:///copy/git%20push%20--force-with-lease). Keep the glyph
+  out of the copied target; only the link text gets it.
+
 ## Showing me files
 
 - When you want me to look at a file from your scratchpad (image, plot, PDF, log), copy it to
