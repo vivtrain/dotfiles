@@ -234,3 +234,6 @@ define() {
 # alias status-master='sudo systemctl status master-monitor'
 # alias restart-zed='sudo systemctl restart zed_x_daemon'
 #
+# >>> robocore blender >>>
+export BLENDER="/home/vivtrain/.local/opt/blender-5.2.3-linux-x64/blender"
+# <<< robocore blender <<<
