@@ -60,6 +60,9 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
 - Click-to-copy links get the copy glyph `󰆏` (nf-md-content_copy, U+F018F) instead, also inside
   the brackets: [󰆏 git push --force-with-lease](file:///copy/git%20push%20--force-with-lease). Keep the glyph
   out of the copied target; only the link text gets it.
+- http/https links get the earth glyph `󰇧` (nf-md-earth, U+F01E7) instead, also inside the
+  brackets: [󰇧 code.claude.com/docs](https://code.claude.com/docs). The session pins popup labels
+  web pins the same way.
 
 ## Showing me files
 
