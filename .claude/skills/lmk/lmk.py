@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 """Critical desktop notification that jumps to the calling tmux pane when clicked.
 
-Usage: lmk.py "<question>"
-Run detached (setsid ... &): it stays alive until the notification is clicked or dismissed.
+Usage:
+  lmk.py "<question>"           notify now. Run detached (setsid ... &): it stays alive until
+                                the notification is clicked or dismissed.
+  lmk.py --after "<question>"   queue it; the Stop hook sends it when Claude's turn ends, so
+                                the reply is fully on screen by the time Vivek clicks.
+  lmk.py --flush                Stop hook entry point: send this pane's queued alert, if any.
+
+LMK_DRY_RUN=1 prints what would be sent instead of notifying (for testing).
 """
+import json
 import os
 import subprocess
 import sys
+import time
 
 import gi
 
@@ -76,8 +84,48 @@ def focus_pane():
 ICON = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clawd-v5.svg")
 
 
+# --after queue: one file per tmux pane (the Bash tool and the Stop hook both inherit
+# claude's $TMUX_PANE). Entries older than QUEUE_TTL_S are from an interrupted turn: dropped.
+QUEUE_DIR = os.path.expanduser("~/.cache/lmk")
+QUEUE_TTL_S = 300
+
+
+def queue_file():
+    return os.path.join(QUEUE_DIR, (PANE.lstrip("%") or "notmux") + ".json")
+
+
+def enqueue(question):
+    os.makedirs(QUEUE_DIR, exist_ok=True)
+    with open(queue_file(), "w") as f:
+        json.dump({"question": question, "time": time.time()}, f)
+
+
+def flush():
+    """Pop this pane's queued alert and send it from a detached process, so the hook returns."""
+    try:
+        with open(queue_file()) as f:
+            entry = json.load(f)
+        os.remove(queue_file())
+    except (OSError, ValueError):
+        return
+    if time.time() - entry.get("time", 0) > QUEUE_TTL_S:
+        return
+    subprocess.Popen([sys.executable, os.path.abspath(__file__), entry["question"]],
+                     stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                     stderr=subprocess.DEVNULL, start_new_session=True)
+
+
 def main():
-    question = " ".join(sys.argv[1:]) or "Claude needs your input"
+    args = sys.argv[1:]
+    if args[:1] == ["--flush"]:
+        return flush()
+    after = args[:1] == ["--after"]
+    question = " ".join(args[after:]) or "Claude needs your input"
+    if after:
+        return enqueue(question)
+    if os.environ.get("LMK_DRY_RUN"):
+        print(f"{location()}: {question}")
+        return
     if PANE and already_visible():
         return
     Notify.init("claude-alert")
