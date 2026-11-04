@@ -4,11 +4,24 @@
 # The built-in PR footer is off (prStatusFooterEnabled=false in ~/.claude.json).
 
 input=$(cat)
-IFS=$'\x1f' read -r model dir < <(jq -r '[.model.display_name // "", .workspace.current_dir // .cwd // ""] | join("\u001f")' <<<"$input")
+IFS=$'\x1f' read -r model dir sid < <(jq -r '[.model.display_name // "", .workspace.current_dir // .cwd // "", .session_id // ""] | join("\u001f")' <<<"$input")
 
 # Model in bold black on a rounded Anthropic orange (#D97757) bubble.
-[ -n "$model" ] && printf '\e[38;2;217;119;87m\ue0b6\e[48;2;217;119;87;38;2;0;0;0;1m\U000f06a9 %s\e[22;49;38;2;217;119;87m\ue0b4\e[0m' "$model"
-[ -n "$dir" ] && printf ' \e[34m%s\e[0m' "${dir/#$HOME/\~}"
+line=
+[ -n "$model" ] && line+=$(printf '\e[38;2;217;119;87m\ue0b6\e[48;2;217;119;87;38;2;0;0;0;1m\U000f06a9 %s\e[22;49;38;2;217;119;87m\ue0b4\e[0m' "$model")
+[ -n "$dir" ] && line+=$(printf ' \e[34m%s\e[0m' "${dir/#$HOME/\~}")
+printf '%s' "$line"
+
+# Session pins (~/.local/bin/pin): red pin, white count, right-aligned on the first line; shown
+# once there is at least one. Claude Code passes the width as $COLUMNS but draws the line
+# narrower (it ellipsizes at COLUMNS-2), so pin_margin columns stay spare; raise it if it cuts off.
+pin_margin=6
+pins=$([ -n "$sid" ] && grep -c . "$HOME/.cache/claude-pins/$sid.tsv" 2>/dev/null)
+if [ "${pins:-0}" -gt 0 ]; then
+  plain=$(sed 's/\x1b\[[0-9;]*m//g' <<<"$line")
+  pad=$(( ${COLUMNS:-80} - pin_margin - $(LC_ALL=C.UTF-8 bash -c 'echo ${#1}' _ "$plain") - 2 - ${#pins} ))
+  printf '%*s\e[31m\U000f0403\e[97m %s\e[0m' "$(( pad > 1 ? pad : 1 ))" '' "$pins"
+fi
 
 # PR for the current branch, on its own line, as an OSC 8 hyperlink: the PR state icon and bold
 # number in a pill colored by review status, then the title in muted lavender (256-color 146).
