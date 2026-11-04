@@ -2,6 +2,7 @@
 # Session order shared by session-menu.sh and switch-session.sh.
 #   session-order.sh list           print "<id> <name>" per session (id without '$'), in order
 #   session-order.sh move -1|+1 ID  move session ID up/down one place and flash the new order
+#                                   (SESSION_ORDER_QUIET=1: no flash)
 # The order lives in each session's @order option. Sessions without one (new
 # ones) sort after the rest, by creation, so the default is creation order.
 list() {
@@ -23,6 +24,8 @@ move)
         n=$((n + 1))
         tmux set-option -t "\$$i" @order "$n"
     done
+    # the sessions popup redraws the order itself
+    [ -n "$SESSION_ORDER_QUIET" ] && exit 0
     # flash the order on the message line (message-style colours), the moved
     # session as a reversed powerline segment, the rest split by thin arrows
     msg=$(list | awk -v id="$id" -v arrow="$(printf '\356\202\260')" -v thin="$(printf '\356\202\261')" '
