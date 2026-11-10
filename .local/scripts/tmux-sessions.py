@@ -4,7 +4,8 @@
 Sessions are listed in ~/.tmux/session-order.sh order (the M-!..M-* numbering), the current one
 marked and preselected, each with its window count, other attached clients and last activity.
 
-  tmux-sessions popup <client>          open it centred on the window (alt+s, status click)
+  tmux-sessions popup <client> [keys]   open it centred on the window (alt+s, status click);
+                                        keys are pre-typed, e.g. "n" for alt+shift+n
   tmux-sessions tui <client>            what runs in the popup:
       j/k g/G move   enter switch   1-9 switch to that number   J/K reorder (@order)
       r rename   n new session   x kill (asks y/n)   q/esc/ctrl+c/alt+s close
@@ -152,11 +153,12 @@ class Sessions:
 
 def main():
     args = sys.argv[1:]
-    if len(args) == 2 and args[0] == "popup":
+    if len(args) in (2, 3) and args[0] == "popup":
         client = args[1]
         s = Sessions(client)
         floatlist.open_popup(client, f"{os.path.realpath(__file__)} tui {client}", s.rows(),
-                             FOOTER, TITLE, anchor="window", theme=floatlist.GREEN, select_id=s.current(), empty=EMPTY)
+                             FOOTER, TITLE, anchor="window", theme=floatlist.GREEN, select_id=s.current(), empty=EMPTY,
+                             keys=args[2] if len(args) == 3 else "")
     elif len(args) == 2 and args[0] == "tui":
         s = Sessions(args[1])
         # FLOATLIST_SELECT (from the launcher) saves asking tmux for the current session

@@ -129,7 +129,9 @@ class FloatList:
             ids = [r.id for r in first]
             want = os.environ.get("FLOATLIST_SELECT") or select_id
             self.sel = ids.index(want) if want in ids else 0
-        for var in ("FLOATLIST_ROWS", "FLOATLIST_SELECT"):  # not for whatever the popup launches
+        # keys the launcher pre-typed (e.g. "n" to open straight into the new-session prompt)
+        self.queue = list(os.environ.get("FLOATLIST_KEYS", ""))
+        for var in ("FLOATLIST_ROWS", "FLOATLIST_SELECT", "FLOATLIST_KEYS"):  # not for whatever the popup launches
             os.environ.pop(var, None)
 
     # ---- state ----
@@ -171,7 +173,10 @@ class FloatList:
     # ---- input ----
     def key(self, timeout):
         """One key, normalized: j/k/g/G for arrows and home/end, "enter", "quit" for
-        esc/ctrl+c/ctrl+d, "timeout" when nothing came in `timeout` seconds; else the text."""
+        esc/ctrl+c/ctrl+d, "timeout" when nothing came in `timeout` seconds; else the text.
+        Pre-typed keys (FLOATLIST_KEYS) come first."""
+        if self.queue:
+            return self.queue.pop(0)
         ready, _, _ = select.select([self.fd], [], [], timeout)
         if not ready:
             return "timeout"
@@ -251,9 +256,10 @@ class FloatList:
 
 
 def open_popup(client, command, rows, footer, title, pane=None, anchor="pane", theme=BLUE,
-               select_id=None, empty="  nothing here"):
+               select_id=None, empty="  nothing here", keys=""):
     """Open `command` in a tmux popup on `client`, sized to `rows` (Row list) and the footer.
-    anchor "pane": centred on `pane`; "window": centred on the client's window."""
+    anchor "pane": centred on `pane`; "window": centred on the client's window.
+    keys: single-character keys to act on before reading the keyboard, as if typed."""
     import subprocess  # here, not at the top: the popup itself never needs it before drawing
 
     def tmux(*a):
@@ -283,6 +289,7 @@ def open_popup(client, command, rows, footer, title, pane=None, anchor="pane", t
     pill = (f"#[fg={a}]\ue0b6#[bg={a},fg=#000000,bold] {title} "
             f"#[bg=default,fg={a},nobold]\ue0b4")
     env = ["-e", f"FLOATLIST_ROWS={rows_to_env(rows)}"] + (["-e", f"FLOATLIST_SELECT={select_id}"] if select_id else [])
+    env += ["-e", f"FLOATLIST_KEYS={keys}"] if keys else []
     # The first frame, pre-rendered at the popup's inner size (border excluded) and printed by the
     # shell before Python starts: the popup never shows an empty screen or a bare cursor.
     ids = [r.id for r in rows]
