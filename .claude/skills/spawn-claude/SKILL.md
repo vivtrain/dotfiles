@@ -25,6 +25,6 @@ It prints the new claude pane as `session:window.pane`.
 
 ## After spawning
 
-- Report the new pane as a link: the [<session> <task> agent](file:///tmux/<session>:<window>.<pane>).
+- Report the new pane as a link: the [󰍹 <session> <task> agent](file:///tmux/<session>:<window>.<pane>).
 - To check that it came up, `tmux display -p -t <pane> '#{pane_current_command} #{alternate_on}'` should show `claude 1`.
 - Talking to it later is a separate permission. Follow the "Other Claude agents" rules in the global CLAUDE.md (use the `relay` skill / SendMessage only when asked).

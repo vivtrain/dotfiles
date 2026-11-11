@@ -62,14 +62,14 @@ A `busy` agent still receives the message. It's queued and seen at its next turn
 
 ## 4. Report back
 
-One line: who you sent it to, e.g. `Sent to the [robocore lighting agent](file:///tmux/robocore:2.1). It's busy, so it'll pick it up after its current turn.`
+One line: who you sent it to, e.g. `Sent to the [󰍹 robocore lighting agent](file:///tmux/robocore:2.1). It's busy, so it'll pick it up after its current turn.`
 
 ## Naming agents to Vivek
 
 Peer names like `robocore-3f` mean nothing to Vivek. They're only for `SendMessage`. Whenever you mention an agent to him, call it "the <session> <task> agent" and make the "<session> <task> agent" part a markdown link to its pane, using the `file:///tmux/...` link that `agents.py` prints. The task is the hand-set window name, the worktree name, or a short form of the title. Examples:
 
-- the [robocore lighting agent](file:///tmux/robocore:2.1)
-- the [lander yaw-plots agent](file:///tmux/lander:1.1)
+- the [󰍹 robocore lighting agent](file:///tmux/robocore:2.1)
+- the [󰍹 lander yaw-plots agent](file:///tmux/lander:1.1)
 
 Vivek sees only the blue link text. Clicking it jumps to that pane: kitty's `~/.config/kitty/open-actions.conf` sends `file:///tmux/` links to `goto-pane.sh` instead of opening a file. Always use a markdown link, never the bare URL. Percent-encode spaces in session names (`%20`). Give the peer name only if he asks for it.
 
