@@ -130,3 +130,21 @@ I talk in my aliases. Your Bash tool is non-interactive, so these aren't loaded 
   - Pass it the original user request, as its description asks.
   - If the agent isn't offered as a `subagent_type` (e.g. it lives only in `core/.claude/agents/`),
     read its `.md` and run a general-purpose agent with that file as its instructions.
+
+## Coworkers on GitHub (DavisMechatronics org)
+
+When I name a coworker ("tag james for review", "assign evan"), map first name → login.
+"Tag X for review" = `gh pr edit --add-reviewer <login>`.
+
+- Avery Phimmasehn = `Aphimm`
+- Cedric Jeanty = `cedricjeanty`
+- Christian Stewart = `weaslepalace`
+- Erik Cummins = `erikcummins`
+- Evan Long = `elong42`
+- James Deacon = `JamesDeacon314`
+- Josh Bimson = `saftysquints` (also commits as `jlbimson`)
+- Marc Grossman = `grossman83`
+- Mike Corsetto = `corsetto`
+- Me (Vivek) = `vivtrain`; review bot = `dm-review-bot`
+- Outside the org (Terabase): Gregory Weitzel = `greg-weitzel-tbe`, Naveen Sankar = `naveen-sankar-tbe`
+- Unknown: `everforgeai`
