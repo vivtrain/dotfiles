@@ -30,15 +30,21 @@ exit 1`
 let tty: Promise<string | null> | null = null
 let lastMode = ''
 
+// Only a found tty is cached, and lastMode only records a write that landed: a failed lookup or
+// write used to stick for the whole session, leaving the cursor frozen in one shape.
 async function setCursor($: Engine, mode: string) {
   if (mode === lastMode) return
   lastMode = mode
   tty ??= $.process
     .run(['sh', '-c', FIND_TTY])
-    .then(r => (r.exitCode === 0 ? r.stdout.trim() : null))
+    .then(r => (r.exitCode === 0 && r.stdout.trim()) || null)
     .catch(() => null)
   const path = await tty
-  if (path) await $.fs.write(path, cursorFor(mode)).catch(() => {})
+  const ok = path != null && (await $.fs.write(path, cursorFor(mode)).then(() => true, () => false))
+  if (!ok) {
+    tty = null
+    if (lastMode === mode) lastMode = ''
+  }
 }
 
 // Matches the engine's own formatting: 3s, 1m 4s, 1h 2m 3s.

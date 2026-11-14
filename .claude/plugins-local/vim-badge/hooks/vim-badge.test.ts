@@ -31,6 +31,25 @@ test('badges the mode, drops the cycle hint, and sets the cursor once per change
   }
 })
 
+test('retries the tty lookup and the write after a failure instead of going quiet', async ($, on) => {
+  const writes: string[] = []
+  let lookups = 0
+  on('process.run', () => {
+    lookups++
+    return { value: lookups === 1 ? { exitCode: 1, stdout: '', stderr: '' } : { exitCode: 0, stdout: '/dev/pts/9\n', stderr: '' } }
+  })
+  on('fs.write', (_$, e) => { writes.push(e.text); return { value: undefined } })
+
+  const ui = await $.ui.mount({ ...HINT, surface: 'terminal', props: props('-- INSERT -- (shift+tab to cycle)') })
+  await ui.redraw(props('(shift+tab to cycle)'))
+  await ui.redraw(props('-- INSERT -- (shift+tab to cycle)'))
+  await ui.unmount()
+
+  // First lookup fails, so INSERT isn't written; the next mode change looks again and lands.
+  expect(lookups).toBe(2)
+  expect(writes).toEqual(['\x1b[2 q', '\x1b[6 q'])
+})
+
 test('draws the end-of-turn line: orange flower, omp-teal text', async $ => {
   const ui = await $.ui.mount({ plugin: 'vim-badge', component: 'TurnDuration', surface: 'terminal', props: { word: 'Baked', durationMs: 64_000 } })
   expect(await ui.drawn()).toMatchObject({ type: 'Box', props: { marginTop: 1 } })
