@@ -65,4 +65,8 @@ if [ -n "$branch" ]; then
       "$url" "$rgb" "$rgb" "$icon" "$num" "$rgb" "$title"
   fi
 fi
+
+# Session todo list (statusline-todo plugin, ~/.local/bin/todo, alt+t popup): one line per item,
+# green bold ✔ done / ☐ open, after everything above.
+"$HOME/.claude/plugins-local/statusline-todo/statusline-segment.sh" "$sid"
 exit 0

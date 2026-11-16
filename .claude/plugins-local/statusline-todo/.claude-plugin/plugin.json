@@ -1,0 +1,5 @@
+{
+  "name": "statusline-todo",
+  "version": "0.1.0",
+  "description": "Per-session todo list shown in the status line; /todo command and a tool for Claude to edit it"
+}

@@ -93,7 +93,7 @@ def render(rows, sel, top, line, empty, t, cols, lines):
         if i == sel:  # a pill around number, mark, text and extra
             extra = f"  \033[2m{r.extra}\033[22m" if r.extra else ""
             # t.sel again after the mark: its colour must not end the pill's background
-            out.append(f" {t.cap_l}{t.sel}{i + 1:>2} {mark}{t.sel} {osc8(r.href, text)}{extra} {t.cap_r}\r\n")
+            out.append(f" {t.cap_l}{t.sel}{i + 1:>2} {mark}\033[22m{t.sel} {osc8(r.href, text)}{extra} {t.cap_r}\r\n")
         else:
             extra = f"  \033[2m{r.extra}\033[0m" if r.extra else ""
             out.append(f"  \033[2m{i + 1:>2}\033[0m {mark}\033[0m \033[{t.text}m{osc8(r.href, text)}\033[0m{extra}\r\n")
