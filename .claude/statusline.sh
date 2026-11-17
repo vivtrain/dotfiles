@@ -30,6 +30,16 @@ fi
 pr_ttl=60
 branch=$([ -n "$dir" ] && git -C "$dir" symbolic-ref --short -q HEAD 2>/dev/null)
 if [ -n "$branch" ]; then
+  # Review worktrees name their local branch after the PR (`pr214-review`), not its head, so find
+  # the head: the upstream's name if one is set (origin/task_228_...); else the one remote branch
+  # sitting on this commit.
+  upstream=$(git -C "$dir" rev-parse --abbrev-ref -q '@{upstream}' 2>/dev/null)
+  if [ -n "$upstream" ] && [ "$upstream" != "${upstream#*/}" ]; then
+    branch=${upstream#*/}
+  elif [ -z "$upstream" ]; then
+    at=$(git -C "$dir" for-each-ref --points-at HEAD --format='%(refname:short)' refs/remotes 2>/dev/null | grep -v '/HEAD$')
+    [ -n "$at" ] && [ "$(wc -l <<<"$at")" -eq 1 ] && branch=${at#*/}
+  fi
   top=$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null)
   cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/claude-statusline
   cache=$cache_dir/pr-$(printf '%s\n%s' "$top" "$branch" | md5sum | cut -c1-16)
