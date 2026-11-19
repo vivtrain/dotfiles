@@ -2,16 +2,37 @@
 
 Applies to every project. Drop notes below as plain bullets.
 
-## PDFs / documents
+## Company style guide (Davis Mechatronics)
 
-- Company brand standards: `~/Documents/davis-mech_brand-guidelines.pdf` (3 pages: logo, color).
-  Use it by default for any PDF I ask you to generate, unless I say otherwise.
-  - Primary blues (titles, accents, backgrounds): Blue 1 `#163258`, Blue 2 `#395a87`
-  - Accent greens, sparingly, never body text: Green 1 `#a0a538`, Green 2 `#d1d923`
-  - Neutrals (backgrounds, body text, secondary titles): Dark grey `#1f1f1b`, Warm grey `#65665c`,
-    Beige `#a6a696`, Cream `#d1d1bd`
-  - Logo: don't recolor/stretch, min 0.75in high in print, clear space = height of the "M".
-- Past reports live in `~/Documents/reports/` (made via headless Chrome HTML→PDF, or pypdf).
+Apply it by default to anything company-facing I ask you to make: PDFs, reports, HTML pages,
+slides, plots and diagrams, UI mockups. Skip it only if I say otherwise.
+
+- Source of truth: `~/Documents/davis-mech_brand-guidelines.pdf`. It has 3 pages: logo formats, logo rules, color.
+- Logo and asset files, in `~/Pictures/`, all transparent-background PNGs unless noted:
+  - `davis-mech_full-logo_on-light.png` (1139×366): standard logo for white or light backgrounds. Blue wordmark, beige circuit.
+  - `davis-mech_full-logo_on-dark.png` (1139×366): reversed logo. White "DAVIS" and gear, so it is invisible on white.
+    Place it only on Blue 1 `#163258` or another dark, plain background.
+  - `davis-mech_icon_on-light.png` / `davis-mech_icon_on-dark.png` (374×366): gear-plus-circuit icon only.
+    Use it only where the full logo doesn't fit or adds nothing, e.g. favicons and small corner marks.
+  - `davis-mech_profile-pic_on-light.jpg` / `_on-dark.jpg` (484×484 JPEG, square avatar):
+    for avatars and social images, not for documents.
+- Logo rules:
+  - Use only those four logo configurations: full or icon, each on light or dark.
+  - Never recolor, stretch or squish the logo, and never place it on bright, gradient or busy backgrounds.
+  - Minimum height is 60px on screen and 0.75in in print.
+  - Clear space on every side is at least the height of the "M" in MECHATRONICS.
+- Colors:
+  - Primary blues, for titles, accents and backgrounds: Blue 1 `#163258` (rgb 22,50,88), Blue 2 `#395a87` (57,90,135).
+  - Neutrals, for plain backgrounds, body text and secondary titles: Dark grey `#1f1f1b`, Warm grey `#65665c`,
+    Beige `#a6a696`, Cream `#d1d1bd`.
+  - Accent greens, used sparingly: Green 1 `#a0a538`, Green 2 `#d1d923`. Never use them for body text.
+    Only small bits of text may be green, and only on a dark background.
+  - Default palette for charts and plots: Blue 1, Blue 2, Warm grey, Beige, then Green 1 to highlight a single series.
+  - The PDF also gives CMYK values for print work.
+- Typography: the guide names no font. The guide itself is set in Inter, so use Inter, falling back to system sans,
+  with headings in Blue 1 or Warm grey and body text in Dark grey.
+- Past reports in `~/Documents/reports/` are examples of the house style.
+  They were made with headless Chrome HTML→PDF or with pypdf.
 
 ## My command-line verbiage
 
