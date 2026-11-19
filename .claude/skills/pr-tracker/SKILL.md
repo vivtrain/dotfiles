@@ -13,6 +13,16 @@ This session becomes the tracker for Vivek's authored PRs in one repo. It is bui
 
 It works in any DavisMechatronics repo. Run commands from the repo's canon checkout, e.g. `~/DavisMechatronics/robocore`.
 
+## 0. Name the window
+
+First thing, rename this session's tmux window so Vivek can find the tracker:
+
+```bash
+tmux rename-window -t "$TMUX_PANE" pr-tracker
+```
+
+`-t "$TMUX_PANE"` targets the window this pane is in, not whichever window is active. Skip this if `$TMUX_PANE` is empty, because then the session isn't in tmux.
+
 ## 1. Seed the todo list
 
 ```bash
