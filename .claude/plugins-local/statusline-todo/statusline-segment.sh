@@ -5,12 +5,16 @@
 # appended to whatever the status line has printed so far. Prints nothing when the list is empty.
 #   done:     green bold ✔ (U+2714), then the text
 #   not done: ☐ (U+2610), then the text
-# Text stays in the terminal's regular style.
+# Text stays in the terminal's regular style. A markdown link [text](url) in an item renders as
+# an OSC 8 hyperlink showing only its text.
 
 sid=$1
 [ -n "$sid" ] || exit 0
 file=${XDG_CACHE_HOME:-$HOME/.cache}/claude-todos/$sid.txt
 [ -s "$file" ] || exit 0
+
+# [text](url) -> OSC 8 hyperlink.
+linkify() { sed -E 's/\[([^][]*)\]\(([^)]*)\)/\x1b]8;;\2\x1b\\\1\x1b]8;;\x1b\\/g'; }
 
 ltrim() { local s=$1; printf '%s' "${s#"${s%%[![:space:]]*}"}"; }
 
@@ -23,5 +27,5 @@ while IFS= read -r line || [ -n "$line" ]; do
     '[]'*)           printf '\n☐ %s' "$(ltrim "${line:2}")" ;;
     *)               printf '\n☐ %s' "$line" ;;
   esac
-done < "$file"
+done < "$file" | linkify
 exit 0
