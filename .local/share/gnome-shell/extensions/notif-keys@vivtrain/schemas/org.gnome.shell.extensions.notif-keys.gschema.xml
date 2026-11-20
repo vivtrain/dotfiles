@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.notif-keys" path="/org/gnome/shell/extensions/notif-keys/">
+    <key name="activate-notification" type="as">
+      <default><![CDATA[['<Super>n']]]></default>
+      <summary>Click the latest notification</summary>
+    </key>
+    <key name="dismiss-notification" type="as">
+      <default><![CDATA[['<Super><Shift>n']]]></default>
+      <summary>Dismiss the latest notification</summary>
+    </key>
+  </schema>
+</schemalist>

@@ -1,0 +1,7 @@
+{
+  "uuid": "notif-keys@vivtrain",
+  "name": "Notification Keys",
+  "description": "Keybindings to click or dismiss the latest notification.",
+  "shell-version": ["42"],
+  "settings-schema": "org.gnome.shell.extensions.notif-keys"
+}
