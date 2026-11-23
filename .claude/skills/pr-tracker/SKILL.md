@@ -131,6 +131,8 @@ On "spawn a claude to do a merge check on N" (PR tracker) or "spawn a claude to 
    ~/.claude/skills/spawn-claude/spawn-claude.sh -d <worktree or canon dir> -n pr<N>-merge -- "<prompt>"   # or -n pr<N>-review
    ```
    The prompt is the merge-check or review template in [prompts.md](prompts.md), filled in. Tell Vivek in one line, linking the new pane per the global CLAUDE.md agent rules.
+
+   Keep the review template's two-message shape (a short briefing, then a short review). Put anything PR-specific you want checked in its `<checks>` slot, never in the briefing step, and don't add extra sections to either message: Vivek reads the briefing cold while the reviewer runs, and long or front-loaded briefings defeat that.
 6. **Hand over ownership.** Mark N's item `~` (`wip`) and add N to the mode's mute file straight away. Until that agent's final **done** note arrives, say nothing about N: no events and no lmk alerts. Vivek is talking to that agent directly, so anything from the tracker is duplicate noise.
 
    Interim messages ("ready to merge", "review posted") are **not** the handback. Acknowledge them silently.
