@@ -1,14 +1,21 @@
 import type { EngineInterface as Engine, Register } from 'claude-code'
 
 // Per-session todo list kept in ~/.cache/claude-todos/<session id>.txt, one item per line:
-//   [ ] not done
-//   [x] done
+//   [ ] open      󰄱
+//   [x] done      󰄵 green
+//   [!] failed    󰅘 red   (blocked, rejected, didn't work)
+//   [~] partial   󰛲 yellow (in progress, waiting, half done)
 // The plugin only edits the file. statusline-segment.sh (next to this folder) draws it, called
 // from ~/.claude/statusline.sh, so it appends to whatever else the status line prints.
 
-type Item = { isDone: boolean; text: string }
+type State = ' ' | 'x' | '!' | '~'
+type Item = { state: State; text: string }
 
-const VERBS = ['add', 'done', 'undo', 'rm', 'remove', 'clear', 'list'] as const
+const GLYPH: Record<State, string> = { ' ': '󰄱', x: '󰄵', '!': '󰅘', '~': '󰛲' }
+// action -> state it sets
+const MARK: Record<string, State> = { done: 'x', fail: '!', wip: '~', undo: ' ' }
+
+const VERBS = ['add', 'done', 'fail', 'wip', 'undo', 'rm', 'remove', 'clear', 'list'] as const
 
 async function todoPath($: Engine) {
   const home = (await $.env.get('HOME')) ?? ''
@@ -22,12 +29,13 @@ function parse(text: string): Item[] {
     .map(line => line.trim())
     .filter(Boolean)
     .map(line => {
-      const m = line.match(/^\[([ xX]?)\]\s*(.*)$/)
-      return m ? { isDone: (m[1] ?? '').toLowerCase() === 'x', text: m[2] ?? '' } : { isDone: false, text: line }
+      const m = line.match(/^\[([ xX!~]?)\]\s*(.*)$/)
+      const c = (m?.[1] ?? ' ').toLowerCase() || ' '
+      return m ? { state: c as State, text: m[2] ?? '' } : { state: ' ' as State, text: line }
     })
 }
 
-const serialize = (items: Item[]) => items.map(i => `[${i.isDone ? 'x' : ' '}] ${i.text}`).join('\n') + (items.length ? '\n' : '')
+const serialize = (items: Item[]) => items.map(i => `[${i.state}] ${i.text}`).join('\n') + (items.length ? '\n' : '')
 
 async function load($: Engine) {
   const path = await todoPath($)
@@ -37,7 +45,7 @@ async function load($: Engine) {
 
 function render(items: Item[]) {
   if (!items.length) return 'Todo list is empty.'
-  return items.map((i, n) => `${n + 1}. ${i.isDone ? '✔' : '☐'} ${i.text}`).join('\n')
+  return items.map((i, n) => `${n + 1}. ${GLYPH[i.state]} ${i.text}`).join('\n')
 }
 
 // 1-based indices; out-of-range ones are reported, not fatal.
@@ -60,10 +68,12 @@ async function apply($: Engine, a: Action): Promise<{ text: string; isError?: bo
     case 'add': {
       const add = (a.items ?? []).map(s => s.trim()).filter(Boolean)
       if (!add.length) return { text: 'Nothing to add.', isError: true }
-      next = [...items, ...add.map(text => ({ isDone: false, text }))]
+      next = [...items, ...add.map(text => ({ state: ' ' as State, text }))]
       break
     }
     case 'done':
+    case 'fail':
+    case 'wip':
     case 'undo':
     case 'rm':
     case 'remove': {
@@ -71,13 +81,13 @@ async function apply($: Engine, a: Action): Promise<{ text: string; isError?: bo
       if (!ok.length) return { text: `No such item${bad.length ? `: ${bad.join(', ')}` : ''}.\n${render(items)}`, isError: true }
       if (bad.length) note = `Skipped out-of-range: ${bad.join(', ')}\n`
       next =
-        a.action === 'done' || a.action === 'undo'
-          ? items.map((i, n) => (ok.includes(n + 1) ? { ...i, isDone: a.action === 'done' } : i))
+        a.action in MARK
+          ? items.map((i, n) => (ok.includes(n + 1) ? { ...i, state: MARK[a.action]! } : i))
           : items.filter((_, n) => !ok.includes(n + 1))
       break
     }
     case 'clear':
-      next = a.all ? [] : items.filter(i => !i.isDone)
+      next = a.all ? [] : items.filter(i => i.state !== 'x')
       break
     default:
       return { text: `Unknown action "${a.action}".`, isError: true }
@@ -91,8 +101,10 @@ const USAGE = [
   '/todo                 list',
   '/todo <text>          add an item (same as /todo add <text>)',
   '/todo add <text>      add an item; separate several with " ; "',
-  '/todo done <n> [n…]   check off',
-  '/todo undo <n> [n…]   uncheck',
+  '/todo done <n> [n…]   check off (green 󰄵)',
+  '/todo fail <n> [n…]   mark failed (red 󰅘)',
+  '/todo wip <n> [n…]    mark partial / in progress (yellow 󰛲)',
+  '/todo undo <n> [n…]   back to open 󰄱',
   '/todo rm <n> [n…]     remove',
   '/todo clear [all]     remove checked items (or everything)',
 ].join('\n')
@@ -115,20 +127,21 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'todo',
-      description: 'Status-line todo list: add, done, undo, rm, clear',
-      argumentHint: '[add|done|undo|rm|clear] …',
+      description: 'Status-line todo list: add, done, fail, wip, undo, rm, clear',
+      argumentHint: '[add|done|fail|wip|undo|rm|clear] …',
     })
     await $.tool.register({
       name: 'todo',
       description:
         "Edit the user's personal todo list shown in their status line (one per session). " +
         'Use only when the user asks about their todo list / status-line todos, not for your own task tracking. ' +
-        'Actions: list; add (items: strings); done, undo, remove (indices: 1-based numbers as shown by list); ' +
-        'clear (removes checked items, or everything with all: true). Returns the list after the change.',
+        'Actions: list; add (items: strings); done (green 󰄵), fail (red 󰅘: failed/blocked), ' +
+        'wip (yellow 󰛲: in progress/partial), undo (back to open 󰄱), remove — all take indices: 1-based numbers as shown by list; ' +
+        'clear (removes done items, or everything with all: true). Returns the list after the change.',
       inputSchema: {
         type: 'object',
         properties: {
-          action: { type: 'string', enum: ['list', 'add', 'done', 'undo', 'remove', 'clear'] },
+          action: { type: 'string', enum: ['list', 'add', 'done', 'fail', 'wip', 'undo', 'remove', 'clear'] },
           items: { type: 'array', items: { type: 'string' } },
           indices: { type: 'array', items: { type: 'integer' } },
           all: { type: 'boolean' },

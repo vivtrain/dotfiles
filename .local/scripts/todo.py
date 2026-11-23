@@ -1,7 +1,10 @@
 #!/usr/bin/env -S python3 -I -S
 """todo — per-session todo list for Claude Code sessions, shown in the status line.
 
-Store: ~/.cache/claude-todos/<session-id>.txt, one item per line, `[ ] text` or `[x] text`.
+Store: ~/.cache/claude-todos/<session-id>.txt, one item per line, `[s] text`, s one of:
+  ` ` open 󰄱, `x` done 󰄵 (green), `!` failed 󰅘 (red), `~` partial/in progress 󰛲 (yellow).
+  Glyphs: Nerd Font Material outline checkboxes (md-checkbox_blank_outline, _marked_outline,
+  md-close_box_outline, md-minus_box_outline).
 The statusline-todo plugin (~/.claude/plugins-local/statusline-todo: /todo and a tool for Claude)
 edits the same file, and its statusline-segment.sh draws it under ~/.claude/statusline.sh.
 
@@ -10,12 +13,12 @@ the tmux pane (--pane, else $TMUX_PANE), as pin's SessionStart hook records it.
 
   todo add <text...>              add an item
   todo ls                         numbered list
-  todo done|undo <n>...           check / uncheck
+  todo done|fail|wip|undo <n>...  mark done 󰄵 / failed 󰅘 / partial 󰛲 / back to open 󰄱
   todo rm <n>...                  remove
   todo clear [all]                remove checked items (or everything)
   todo count | file               open items | path of the store
   todo popup <pane> <client> [n]  open the popup (tmux alt+t), row n selected; todo tui runs in it:
-  todo tui [--pane %N]            x/space/enter toggle, a add, o/O add below/above, e edit, dd cut,
+  todo tui [--pane %N]            v/space/enter toggle done, ! failed, ~ partial, a add, o/O add below/above, e edit, x/dd cut,
                                   p/P paste, J/K move, c clear checked, u undo, q/esc/alt+t close
 """
 import os
@@ -31,12 +34,14 @@ from floatlist import CLOSE, Row, Theme  # noqa: E402
 from pin import resolve_session as pin_resolve_session  # noqa: E402
 
 STORE = os.path.join(os.environ.get("XDG_CACHE_HOME") or os.path.expanduser("~/.cache"), "claude-todos")
-CHECK, BOX = "✔", "☐"
+# state char in the store -> (glyph, SGR colour)
+MARKS = {" ": ("󰄱", "39"), "x": ("󰄵", "1;32"), "!": ("󰅘", "1;31"), "~": ("󰛲", "1;33")}
+VERB_STATE = {"done": "x", "fail": "!", "wip": "~", "undo": " "}
 GLYPH_TODO = "\U000f0c52"  # md-format_list_checks
 # The pins popup's blue pill and border, but item text in the terminal's regular colour.
 THEME = Theme("30;46;77", "0", "blue")
 # The common keys only; the rest (space/enter, o/O, dd, p/P, J/K, q) are in the docstring above.
-FOOTER = "  x done · a add · e edit · c clear done · u undo"
+FOOTER = "  v/!/~ mark · x cut · a add · e edit · c clear done · u undo"
 EMPTY = "  nothing to do (a adds)"
 
 
@@ -55,14 +60,13 @@ def store_file(session):
 
 
 def parse(line):
+    """-> [state, text], state one of MARKS' keys."""
     line = line.strip()
-    if line[:3].lower() == "[x]":
-        return [True, line[3:].strip()]
-    if line.startswith("[ ]"):
-        return [False, line[3:].strip()]
+    if len(line) >= 3 and line[0] == "[" and line[2] == "]" and line[1].lower() in MARKS:
+        return [line[1].lower(), line[3:].strip()]
     if line.startswith("[]"):
-        return [False, line[2:].strip()]
-    return [False, line]
+        return [" ", line[2:].strip()]
+    return [" ", line]
 
 
 def load(session):
@@ -78,8 +82,8 @@ def save(session, items):
     path = store_file(session)
     tmp = f"{path}.tmp{os.getpid()}"
     with open(tmp, "w") as f:
-        for done, text in items:
-            f.write(f"[{'x' if done else ' '}] {text}\n")
+        for state, text in items:
+            f.write(f"[{state}] {text}\n")
     os.replace(tmp, path)  # atomic: the status line never reads half a file
 
 
@@ -106,9 +110,11 @@ def indices(items, args):
 def show(items):
     if not items:
         print("nothing to do")
-    green, off = ("\033[1;32m", "\033[0m") if sys.stdout.isatty() else ("", "")
-    for i, (done, text) in enumerate(items, 1):
-        print(f"{i:>3}  {green + CHECK + off if done else BOX} {text}")
+    tty_out = sys.stdout.isatty()
+    for i, (state, text) in enumerate(items, 1):
+        glyph, sgr = MARKS[state]
+        mark = f"\033[{sgr}m{glyph}\033[0m" if tty_out else glyph
+        print(f"{i:>3}  {mark} {text}")
 
 
 # ---------- popup ----------
@@ -165,13 +171,14 @@ class TodoKeys:
         return CLOSE
 
     def rows(self):
-        return [Row(text, mark=CHECK if done else BOX, mark_color="1;32" if done else "39", id=str(i))
-                for i, (done, text) in enumerate(load(self.session))]
+        return [Row(text, mark=MARKS[state][0], mark_color=MARKS[state][1], id=str(i))
+                for i, (state, text) in enumerate(load(self.session))]
 
     def keys(self):
-        return {" ": self.toggle, "x": self.toggle, "enter": self.toggle,
+        return {" ": self.toggle, "v": self.toggle, "enter": self.toggle,
+                "!": lambda ui: self.toggle(ui, "!"), "~": lambda ui: self.toggle(ui, "~"),
                 "a": lambda ui: self.add(ui, None), "o": lambda ui: self.add(ui, 1), "O": lambda ui: self.add(ui, 0),
-                "e": self.edit, "i": self.edit, "dd": self.cut, "D": self.cut,
+                "e": self.edit, "i": self.edit, "x": self.cut, "dd": self.cut, "D": self.cut,
                 "p": lambda ui: self.paste(ui, 1), "P": lambda ui: self.paste(ui, 0),
                 "J": lambda ui: self.move(ui, 1), "K": lambda ui: self.move(ui, -1),
                 "c": self.clear, "u": self.undo}
@@ -182,11 +189,12 @@ class TodoKeys:
         if ui is not None and sel is not None:
             ui.select(str(sel))
 
-    def toggle(self, ui):
+    def toggle(self, ui, state="x"):
+        """Set the selected item to `state`, or back to open if it already is."""
         items = load(self.session)
         if items:
             new = [list(x) for x in items]
-            new[ui.sel][0] = not new[ui.sel][0]
+            new[ui.sel][0] = " " if new[ui.sel][0] == state else state
             self.change(items, new)
 
     def add(self, ui, offset):
@@ -195,7 +203,7 @@ class TodoKeys:
             return
         items = load(self.session)
         at = len(items) if offset is None or not items else ui.sel + offset
-        self.change(items, items[:at] + [[False, text.strip()]] + items[at:], ui, at)
+        self.change(items, items[:at] + [[" ", text.strip()]] + items[at:], ui, at)
         return self.regrow(ui, at)
 
     def edit(self, ui):
@@ -232,8 +240,8 @@ class TodoKeys:
 
     def clear(self, ui):
         items = load(self.session)
-        if any(done for done, _ in items):
-            self.change(items, [x for x in items if not x[0]])
+        if any(state == "x" for state, _ in items):
+            self.change(items, [x for x in items if x[0] != "x"])
             ui.flash("  cleared checked items (u undoes)")
 
     def undo(self, ui):
@@ -299,14 +307,14 @@ def main():
         text = " ".join(rest).strip()
         if not text:
             die("add needs text")
-        items.append([False, text])
+        items.append([" ", text])
         save(sid, items)
         show(items)
     elif cmd == "ls":
         show(items)
-    elif cmd in ("done", "undo"):
+    elif cmd in VERB_STATE:
         for i in indices(items, rest):
-            items[i][0] = cmd == "done"
+            items[i][0] = VERB_STATE[cmd]
         save(sid, items)
         show(items)
     elif cmd in ("rm", "remove"):
@@ -315,11 +323,11 @@ def main():
         save(sid, items)
         show(items)
     elif cmd == "clear":
-        items = [] if rest[:1] == ["all"] else [x for x in items if not x[0]]
+        items = [] if rest[:1] == ["all"] else [x for x in items if x[0] != "x"]
         save(sid, items)
         show(items)
     elif cmd == "count":
-        print(sum(not done for done, _ in items))
+        print(sum(state != "x" for state, _ in items))
     elif cmd == "file":
         print(store_file(sid))
     else:
