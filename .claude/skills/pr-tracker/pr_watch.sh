@@ -1,29 +1,56 @@
 #!/usr/bin/env bash
-# Watch my open PRs in one GitHub repo and print one line per change, for the Monitor tool.
-# Usage: pr_watch.sh <repo-dir | owner/name> [interval-seconds, default 60]
+# Watch open PRs in one GitHub repo and print one line per change, for the Monitor tool.
+# Usage: pr_watch.sh [--reviews] <repo-dir | owner/name> [interval-seconds, default 60]
+#   default    PR tracker: PRs I authored.
+#   --reviews  review tracker: others' PRs where my review is requested or I have reviewed.
 # Lines: NEW #N title: state / CHANGED #N title: old -> new / GONE #N: MERGED|CLOSED decision=...
 # State per PR: draft, reviewDecision, CI collapsed to running|green|FAILED, each reviewer's latest
-# review, pending review requests. Quiet when nothing changed.
-# Mute file: $XDG_CACHE_HOME/pr-tracker/<owner>_<name>.mute, one PR number per line (e.g. 245).
+# review, pending review requests. --reviews adds head=<sha7> (author pushed) and
+# me=requested|<my latest review state>|none.
+# Mute file: $XDG_CACHE_HOME/pr-tracker/<owner>_<name>[.reviews].mute, one PR number per line.
 # Muted PRs emit nothing; it is re-read every poll, so edit it while the watcher runs.
 set -u
-src=${1:?usage: pr_watch.sh <repo-dir|owner/name> [interval]}
+mode=prs
+[ "${1:-}" = --reviews ] && { mode=reviews; shift; }
+src=${1:?usage: pr_watch.sh [--reviews] <repo-dir|owner/name> [interval]}
 interval=${2:-60}
 if [ -d "$src" ]; then
   repo=$(cd "$src" && gh repo view --json nameWithOwner --jq .nameWithOwner) || exit 1
 else
   repo=$src
 fi
-MUTE=${XDG_CACHE_HOME:-$HOME/.cache}/pr-tracker/${repo/\//_}.mute
+suffix=; [ "$mode" = reviews ] && suffix=.reviews
+MUTE=${XDG_CACHE_HOME:-$HOME/.cache}/pr-tracker/${repo/\//_}$suffix.mute
 mkdir -p "$(dirname "$MUTE")"
 muted() { [ -f "$MUTE" ] && grep -qx "${1#\#}" "$MUTE"; }
+me=$(gh api user --jq .login) || exit 1
+
+FIELDS=number,title,author,isDraft,reviewDecision,statusCheckRollup,reviewRequests,latestReviews,headRefOid
+JQ='
+def ci: [.statusCheckRollup[]?|(.conclusion // .state // "")] as $c
+  | if any($c[]; test("FAIL|ERROR|CANCEL|TIMED_OUT|ACTION_REQUIRED")) then "FAILED"
+    elif any($c[]; . == "" or test("PENDING|IN_PROGRESS|QUEUED|EXPECTED")) then "running"
+    else "green" end;
+def reqs: [.reviewRequests[]|(.login // .slug // .name)];
+.[] | "#\(.number)\t\(.title[0:50])\(if $mode == "reviews" then " (\(.author.login))" else "" end)\tdraft=\(.isDraft) decision=\(.reviewDecision) ci=\(ci)"
+  + (if $mode == "reviews" then
+       " head=\(.headRefOid[0:7]) me=\(if (reqs|index($me)) then "requested"
+         else ([.latestReviews[]|select(.author.login == $me)|.state][0] // "none") end)"
+     else "" end)
+  + " reviews=\([.latestReviews[]|"\(.author.login):\(.state)"]|sort|join(",")) requested=\(reqs|sort|join(","))"'
+list() { gh pr list -R "$repo" --state open --limit 100 --json "$FIELDS" "$@"; }
 snap() {
-  gh pr list -R "$repo" --author @me --state open \
-    --json number,title,isDraft,reviewDecision,statusCheckRollup,reviewRequests,latestReviews \
-    --jq '.[] | "#\(.number)\t\(.title[0:50])\tdraft=\(.isDraft) decision=\(.reviewDecision) ci=\([.statusCheckRollup[]?|(.conclusion // .state // "")] as $c | if any($c[]; test("FAIL|ERROR|CANCEL|TIMED_OUT|ACTION_REQUIRED")) then "FAILED" elif any($c[]; . == "" or test("PENDING|IN_PROGRESS|QUEUED|EXPECTED")) then "running" else "green" end) reviews=\([.latestReviews[]|"\(.author.login):\(.state)"]|sort|join(",")) requested=\([.reviewRequests[].login]|sort|join(","))"' \
-    2>/dev/null | sort
+  local raw
+  if [ "$mode" = reviews ]; then
+    # A submitted review drops the request, so union "requested" with "reviewed by me".
+    raw=$( { list --search "review-requested:@me -author:@me" && \
+             list --search "reviewed-by:@me -author:@me"; } 2>/dev/null | jq -s 'add | unique_by(.number)') || return 1
+  else
+    raw=$(list --author @me 2>/dev/null) || return 1
+  fi
+  jq -r --arg mode "$mode" --arg me "$me" "$JQ" <<<"$raw" | sort
 }
-echo "watching $repo every ${interval}s; mute file $MUTE"
+echo "watching $repo ($mode) as $me every ${interval}s; mute file $MUTE"
 prev=$(snap)
 while true; do
   sleep "$interval"

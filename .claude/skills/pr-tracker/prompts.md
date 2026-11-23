@@ -34,18 +34,29 @@ Check the PR is still open before spawning.
 If the branch is already checked out in an existing worktree, point `-d` at it, and add "This
 worktree already existed: leave it; the tracker removes it after merge."
 
-## Review (a coworker's PR where Vivek's review is requested)
+## Review (a coworker's PR where Vivek's review is requested; review tracker)
 
-Spawn with `-d <canon dir> -n pr<N>-review`.
+Spawn with `-d <canon dir> -n pr<N>-review`. Fill `<Name>/<login>` from the coworker list.
 
 > Review <repo> PR #<N> (<title>, by <Name>/<login>, branch <branch>). My review is requested.
-> Check it out in a worktree under .claude/worktrees/pr<N>-review, run the affected tests, and
-> review it with the repo's reviewer agent per my global CLAUDE.md (code-change-reviewer by
-> default), passing the PR description as the original request. Report findings to me in chat. Do
-> not post, approve or comment on GitHub unless I ask. When I say I'm done: (1) remove your review
-> worktree and its local branch; (2) send a short summary via SendMessage to the <tracker> agent,
-> peer <peer> (tmux <pane>): verdict, top findings, what I did on GitHub, whether it merged or
+> Check it out in a worktree tracking the PR branch: git fetch origin <branch> && git worktree add
+> --track -b pr<N>-review .claude/worktrees/pr<N>-review origin/<branch>. As soon as the worktree exists,
+> launch the repo's reviewer agent per my global CLAUDE.md (code-change-reviewer by default) in the
+> background, passing it the PR description as the original request, so it runs while I read.
+> While it runs, write me a high-level explanation of the PR to read: the problem it solves and why,
+> the strategy and the alternatives it implies, a walkthrough of the implementation file by file in
+> reading order, anything surprising or risky, and what I should look at most closely. Keep it to
+> what I need to review well, not a restatement of the diff. Then run the affected tests
+> (<test tools>). When the reviewer agent returns, verify its findings against the code yourself
+> and report them in chat, ranked, with your own view on each; drop any you can't confirm. Do not
+> post, approve, request changes or comment on GitHub unless I ask; if I ask, draft the text for me
+> to confirm first. When I say I'm done: (1) remove your review worktree and its local branch;
+> (2) send a short summary via SendMessage to the <tracker> agent, peer <peer> (tmux <pane>):
+> verdict, top findings, what I did on GitHub, the head commit reviewed, whether the PR merged or
 > changed meanwhile; (3) only then close your own tmux window with: tmux kill-window -t
 > "$(tmux display -p -t "$TMUX_PANE" '#S:#I')". Do not close it before I say I'm done.
 
-When the summary arrives, verify the state and review with `gh pr view`, then remove the todo item.
+For a re-review (author pushed or re-requested after an earlier round), add: "This is a re-review;
+I last reviewed at <sha>. Focus the explanation and the review on what changed since then
+(`git diff <sha>..HEAD`, or the range-diff if the branch was rebased), and on whether my earlier
+comments were addressed."
