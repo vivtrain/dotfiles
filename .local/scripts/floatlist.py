@@ -87,7 +87,9 @@ def render(rows, sel, top, line, empty, t, cols, lines):
         out.append(f"\033[2m{clip(empty, cols)}\033[0m\r\n")
     for i in range(top, min(top + body, len(rows))):
         r = rows[i]
-        room = cols - ROW_PAD - (len(r.extra) + 2 if r.extra else 0)
+        # - 1: the selection pill's right cap sits after ROW_PAD's trailing space; without it a
+        # clipped row's pill wraps onto the next line.
+        room = cols - ROW_PAD - 1 - (len(r.extra) + 2 if r.extra else 0)
         text = clip(r.text, max(room, 8))
         mark = f"\033[{r.mark_color}m{r.mark or ' '}"
         if i == sel:  # a pill around number, mark, text and extra
