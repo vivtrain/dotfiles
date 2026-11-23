@@ -33,7 +33,8 @@ if [ -n "$branch" ]; then
   # Review worktrees name their local branch after the PR (`pr214-review`), not its head, so find
   # the head: the upstream's name if one is set (origin/task_228_...); else the one remote branch
   # sitting on this commit.
-  upstream=$(git -C "$dir" rev-parse --abbrev-ref -q '@{upstream}' 2>/dev/null)
+  # With no upstream, rev-parse still echoes the literal '@{upstream}' (exit 128), so clear it on failure.
+  upstream=$(git -C "$dir" rev-parse --abbrev-ref -q '@{upstream}' 2>/dev/null) || upstream=
   if [ -n "$upstream" ] && [ "$upstream" != "${upstream#*/}" ]; then
     branch=${upstream#*/}
   elif [ -z "$upstream" ]; then
@@ -43,7 +44,9 @@ if [ -n "$branch" ]; then
   top=$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null)
   cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/claude-statusline
   cache=$cache_dir/pr-$(printf '%s\n%s' "$top" "$branch" | md5sum | cut -c1-16)
-  if [ ! -e "$cache" ] || [ $(( $(date +%s) - $(stat -c %Y "$cache") )) -ge $pr_ttl ]; then
+  age=$([ -e "$cache" ] && echo $(( $(date +%s) - $(stat -c %Y "$cache") )))
+  # A future mtime (clock change) gives a negative age that would never expire, so refresh then too.
+  if [ -z "$age" ] || [ "$age" -ge $pr_ttl ] || [ "$age" -lt 0 ]; then
     mkdir -p "$cache_dir"
     touch "$cache"  # doubles as a lock so the next ticks don't spawn another gh
     ( cd "$top" && gh pr view "$branch" --json number,title,url,state,isDraft,reviewDecision,reviewRequests,latestReviews \
