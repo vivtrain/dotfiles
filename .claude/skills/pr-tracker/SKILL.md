@@ -28,6 +28,21 @@ It is built from other skills:
 
 It works in any DavisMechatronics repo. Run commands from the repo's canon checkout, e.g. `~/DavisMechatronics/robocore`.
 
+## Todo tool API
+
+`mcp__statusline-todo__todo` is often a deferred tool. If it is, load its schema first with ToolSearch `select:mcp__statusline-todo__todo`. Don't guess its parameters: it ignores unknown fields without an error, so a wrong call like `text: "..."` just returns "Nothing to add."
+
+- `action` (required): `list` | `add` | `done` | `fail` | `wip` | `undo` | `remove` | `clear`.
+- `add` takes `items`: an array of strings, one per item. Several items fit in one call.
+- `done` / `fail` / `wip` / `undo` / `remove` take `indices`: an array of 1-based ints, as `list` shows them.
+- `clear` removes done items; with `all: true` it removes everything.
+- Every call returns the list after the change, so check indices there.
+
+```json
+{"action": "add", "items": ["[󰇧 #412 fix lidar sync](https://github.com/DavisMechatronics/robocore/pull/412) (Evan; to review; green)", "[󰇧 #415 bump zed sdk](https://github.com/DavisMechatronics/robocore/pull/415) (James; to review; running)"]}
+{"action": "wip", "indices": [2]}
+```
+
 ## 0. Name the window
 
 First thing, rename this session's tmux window to the mode's name so Vivek can find the tracker:
