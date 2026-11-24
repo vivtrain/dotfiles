@@ -124,7 +124,7 @@ On "spawn a claude to do a merge check on N" (PR tracker) or "spawn a claude to 
 
 1. Confirm that N is open. For a merge check, also confirm it is approved. For a review, note whether it is a re-review and the head Vivek last reviewed (his latest review's commit: `gh api repos/<owner>/<name>/pulls/N/reviews --jq '[.[]|select(.user.login=="vivtrain")]|last|.commit_id'`).
 2. Find its branch: `gh pr view N --json headRefName,title,url,author`.
-3. Check for an existing worktree with `git worktree list`.
+3. Check for an existing worktree with `git worktree list`. A `pr<N>-review` worktree left by a killed review agent blocks the template's `worktree add`: if no agent uses it (`agents.py`) and it is clean, remove it and its branch before spawning.
 4. Find your own peer name and pane: the `(you)` row of `~/.claude/skills/relay/agents.py`.
 5. Spawn the agent:
    ```bash
@@ -132,7 +132,7 @@ On "spawn a claude to do a merge check on N" (PR tracker) or "spawn a claude to 
    ```
    The prompt is the merge-check or review template in [prompts.md](prompts.md), filled in. Tell Vivek in one line, linking the new pane per the global CLAUDE.md agent rules.
 
-   Keep the review template's two-message shape (a short briefing, then a short review). Put anything PR-specific you want checked in its `<checks>` slot, never in the briefing step, and don't add extra sections to either message: Vivek reads the briefing cold while the reviewer runs, and long or front-loaded briefings defeat that.
+   Keep the review template's shape: the spawned agent delegates the review and the tests to background subagents, writes the briefing itself as its first message and ends its turn, then sends one short review when the subagents return. Vivek reads the briefing while the review runs, and talks to the agent meanwhile. Put PR-specific questions in the `<checks>` slot (at most 3, about what the PR changes), never in the briefing, and don't add sections to either message.
 6. **Hand over ownership.** Mark N's item `~` (`wip`) and add N to the mode's mute file straight away. Until that agent's final **done** note arrives, say nothing about N: no events and no lmk alerts. Vivek is talking to that agent directly, so anything from the tracker is duplicate noise.
 
    Interim messages ("ready to merge", "review posted") are **not** the handback. Acknowledge them silently.
