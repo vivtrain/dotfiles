@@ -1,11 +1,11 @@
 #!/usr/bin/env -S python3 -I -S
-"""links — pick a link off the screen of the current tmux window, in a floatlist popup.
+"""links — pick a link off the screen of the current tmux pane, in a floatlist popup.
 
-Scans every pane of the window for OSC 8 hyperlinks (what Claude Code, the status line and the
+Scans the pane for OSC 8 hyperlinks (what Claude Code, the status line and the
 popups draw: file:///path, file:///copy/<cmd>, file:///tmux/<pane>, https://...) and bare
-http(s) URLs. Alternate-screen panes (Claude, vim) give their visible screen; others also give
-their recent scrollback. The active pane comes first, newest (lowest on screen) link first;
-each target is listed once.
+http(s) URLs. An alternate-screen pane (Claude, vim) gives its visible screen; others also give
+their recent scrollback. Links are in screen order, top to bottom, and each target is listed
+once, where it first appears.
 
   links popup <pane> <client>   open the popup (tmux binding, alt+shift+u)
   links tui --pane %N           what runs in it: enter or 1-9 opens (as a kitty click does),
@@ -24,7 +24,7 @@ from floatlist import CLOSE, Row  # noqa: E402
 
 GLYPH_LINKS = "\U000f0339"  # md-link_variant
 FOOTER = "  enter/1-9 open · y copy · p pin · q quit"
-EMPTY = "  no links in this window"
+EMPTY = "  no links in this pane"
 SCROLLBACK = 300  # lines of history per non-alternate-screen pane
 
 # OSC 8: ESC ] 8 ; params ; URI ST ... ESC ] 8 ; ; ST, with ST = ESC \ or BEL.
@@ -74,25 +74,18 @@ def scan_text(text):
     return [(t, " ".join(label.split()), lid) for t, label, lid in out]
 
 
-def panes_of(pane):
-    """Panes of `pane`'s window, `pane` first: [(pane_id, alternate_on)]."""
-    rows = [line.split() for line in tmux("list-panes", "-t", pane, "-F", "#{pane_id} #{alternate_on}").splitlines()]
-    rows = [(p, a == "1") for p, a in rows]
-    return sorted(rows, key=lambda r: r[0] != pane)
-
-
 def collect(pane):
-    """-> [(target, label, pane_id)], newest first, one per target."""
+    """-> [(target, label, pane)] for `pane`, in screen order, top to bottom, one per target."""
     from pin import label_of
+    alt = tmux("display-message", "-p", "-t", pane, "#{alternate_on}").strip() == "1"
+    args = ["capture-pane", "-p", "-e", "-J", "-t", pane] + ([] if alt else ["-S", f"-{SCROLLBACK}"])
     seen, out = set(), []
-    for p, alt in panes_of(pane):
-        args = ["capture-pane", "-p", "-e", "-J", "-t", p] + ([] if alt else ["-S", f"-{SCROLLBACK}"])
-        for target, label, _ in reversed(scan_text(tmux(*args))):
-            if not target or target in seen:
-                continue
-            seen.add(target)
-            bare = not label or len(label) <= 2  # empty, or just a glyph
-            out.append((target, label_of(target) if bare else label, p))
+    for target, label, _ in scan_text(tmux(*args)):
+        if not target or target in seen:
+            continue
+        seen.add(target)
+        bare = not label or len(label) <= 2  # empty, or just a glyph
+        out.append((target, label_of(target) if bare else label, pane))
     return out
 
 
@@ -139,15 +132,12 @@ class LinkKeys:
         import subprocess
         if not self.items:
             return
-        target, label, p = self.items[ui.sel]
-        # Pin to the Claude session in the pane the link came from, else the pane the popup is over.
-        for where in dict.fromkeys((p, self.pane)):
-            # pin's pane -> session map outlives panes and pane ids get reused, so only trust it
-            # for a pane that is running Claude now.
-            if tmux("display-message", "-p", "-t", where, "#{pane_current_command}").strip() != "claude":
-                continue
+        target, label, _ = self.items[ui.sel]
+        # pin's pane -> session map outlives panes and pane ids get reused, so only trust it for a
+        # pane that is running Claude now.
+        if tmux("display-message", "-p", "-t", self.pane, "#{pane_current_command}").strip() == "claude":
             r = subprocess.run([os.path.join(os.path.dirname(os.path.realpath(__file__)), "pin.py"),
-                                "--pane", where, "add", target, label], capture_output=True, text=True)
+                                "--pane", self.pane, "add", target, label], capture_output=True, text=True)
             if r.returncode == 0:
                 ui.flash("  " + r.stdout.strip())
                 return
