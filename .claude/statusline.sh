@@ -26,6 +26,7 @@ fi
 # PR for the current branch, on its own line, as an OSC 8 hyperlink: the PR state icon and bold
 # number in a pill colored by review status, then the title in muted lavender (256-color 146).
 # Review colors: white none requested, yellow awaiting review, green approved, red changes requested.
+# GitHub's APPROVED decision wins over reviews still requested (an extra reviewer doesn't un-green it).
 # This runs every second, so gh is only called in the background, at most once a minute per branch.
 pr_ttl=60
 branch=$([ -n "$dir" ] && git -C "$dir" symbolic-ref --short -q HEAD 2>/dev/null)
@@ -51,7 +52,8 @@ if [ -n "$branch" ]; then
     touch "$cache"  # doubles as a lock so the next ticks don't spawn another gh
     ( cd "$top" && gh pr view "$branch" --json number,title,url,state,isDraft,reviewDecision,reviewRequests,latestReviews \
         -q '(.latestReviews | map(.state)) as $r
-            | (if (.reviewRequests | length) > 0 then "pending"
+            | (if .reviewDecision == "APPROVED" then "approved"
+               elif (.reviewRequests | length) > 0 then "pending"
                elif .reviewDecision == "CHANGES_REQUESTED" or ($r | index("CHANGES_REQUESTED")) then "changes"
                elif .reviewDecision == "APPROVED" or ($r | index("APPROVED")) then "approved"
                else "none" end) as $review
