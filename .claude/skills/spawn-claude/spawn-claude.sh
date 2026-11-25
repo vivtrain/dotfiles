@@ -45,6 +45,16 @@ fi
 cmd=claude
 for a in "$@"; do cmd+=" $(printf '%q' "$a")"; done
 
+# Typed text waits in the pty's canonical line buffer (4095 bytes) until bash
+# reads it, and anything past that is dropped. A long command goes in a file
+# that the pane sources instead. Bash reads a sourced file whole before
+# running it, so the file can delete itself first.
+if (( $(printf %s "$cmd" | wc -c) > 3500 )); then
+    tmp=$(mktemp "${XDG_RUNTIME_DIR:-/tmp}/spawn-claude.XXXXXX")
+    printf 'rm -f -- %q\n%s\n' "$tmp" "$cmd" > "$tmp"
+    cmd=". $(printf '%q' "$tmp")"
+fi
+
 # One tmux round-trip for the rest. Typed keys queue in the pty until bash
 # finishes .bashrc and reads them, so no need to wait for the prompt.
 t=(send-keys -t "$pane" -l "$cmd" \; send-keys -t "$pane" Enter)

@@ -17,10 +17,12 @@ It prints the new claude pane as `session:window.pane`.
 - `-1` skips the split. `-f` switches to the new window.
 - Anything after `--` goes to claude. A quoted string becomes the new Claude's first prompt:
   `spawn-claude.sh -d ~/DavisMechatronics/robocore -n lighting -- "look into the LED flicker in ..."`
+- Keep spawn prompts concise: state the task and point at files, PRs or branches instead of pasting their contents. If the typed command passes about 3500 bytes, the script writes it to a temp file and the pane sources that file. That is a fallback for prompts that really need the length, not the normal path.
 
 ## Why it's done this way
 
 - **`claude` is typed into a bash, not run as the window's command.** `tmux new-window claude` runs the command via `sh -c` with the tmux server's environment. That skips `.bashrc`, so `CLAUDE_CODE_NO_FLICKER=1` is missing: there's no full-screen mode and the prompt doesn't stick to the bottom. And when claude exits, the window closes. Typing it into an interactive bash avoids both problems.
+- **Long commands go through a file.** Typed keys wait in the pty's canonical line buffer, which holds 4095 bytes, until bash reads them, and the rest is dropped. A prompt cut off there loses its closing quote, so bash sits at a `>` prompt and claude never starts. Typing `. /run/user/…/spawn-claude.XXXXXX` stays short. The file deletes itself first; that's safe because bash reads a sourced file whole before running it.
 - `-d` on new-window and split-window keeps Vivek's current window focused.
 
 ## After spawning
