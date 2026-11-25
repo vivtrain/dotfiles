@@ -1,7 +1,9 @@
-# Vim keys in Nautilus 42's list view: j/k = down/up, h = parent folder, l = open (like Enter).
+# Vim keys in Nautilus 42's list view: j/k = down/up, h = parent folder, l = open (like Enter),
+# Esc = close the window (only from the file list, and not while a search is open: Esc ends that).
 # Nautilus has no keybinding config, so this hooks each window's key presses (needs python3-nautilus).
-# Text fields (rename, path bar, search) and modified keys (Ctrl/Alt/Super) pass through untouched;
-# other letters still start type-to-search. Reload: nautilus -q
+# Text fields (rename, path bar, search), the sidebar and modified keys (Ctrl/Alt/Super) pass
+# through untouched; other letters still start type-to-search. A new window (e.g. opened from a
+# link) has nothing focused, so hjkl there first focuses the visible list. Reload: nautilus -q
 import weakref
 
 import gi
@@ -16,15 +18,54 @@ _MODS = (Gdk.ModifierType.SHIFT_MASK | Gdk.ModifierType.CONTROL_MASK |
 _hooked = weakref.WeakSet()
 
 
+def _widgets(w):
+    yield w
+    if isinstance(w, Gtk.Container):
+        kids = []
+        w.forall(kids.append)  # forall, not get_children: the list sits in internal children too
+        for k in kids:
+            yield from _widgets(k)
+
+
+def _visible_list(window):
+    """The file list of the current tab: the mapped TreeView (other tabs' lists are unmapped)."""
+    for w in _widgets(window):
+        if isinstance(w, Gtk.TreeView) and w.get_mapped():
+            return w
+    return None
+
+
+def _in_sidebar(w):
+    while w is not None:
+        if isinstance(w, Gtk.PlacesSidebar):
+            return True
+        w = w.get_parent()
+    return False
+
+
+def _search_open(window):
+    return any(isinstance(w, Gtk.SearchEntry) and w.get_mapped() for w in _widgets(window))
+
+
 def _on_key(window, event):
     if event.state & _MODS:
         return False
     key = Gdk.keyval_name(event.keyval)
+    if key == 'Escape':
+        if isinstance(window.get_focus(), Gtk.TreeView) and not _search_open(window):
+            window.close()
+            return True
+        return False
     if key not in ('h', 'j', 'k', 'l'):
         return False
     focus = window.get_focus()
-    if not isinstance(focus, Gtk.TreeView):  # sidebar, text fields, grid view: leave keys alone
-        return False
+    if not isinstance(focus, Gtk.TreeView):
+        if isinstance(focus, Gtk.Editable) or _in_sidebar(focus):  # typing, or the sidebar's own keys
+            return False
+        focus = _visible_list(window)  # nothing (or a button) focused, e.g. a freshly opened window
+        if focus is None:  # grid view has no TreeView: leave keys alone
+            return False
+        focus.grab_focus()
 
     if key in ('j', 'k'):
         focus.emit('move-cursor', Gtk.MovementStep.DISPLAY_LINES, 1 if key == 'j' else -1)
