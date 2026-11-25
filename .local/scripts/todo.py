@@ -11,7 +11,9 @@ edits the same file, and its statusline-segment.sh draws it under ~/.claude/stat
 Which session: --session ID, else $CLAUDE_TODO_SESSION, else the Claude session last started in
 the tmux pane (--pane, else $TMUX_PANE), as pin's SessionStart hook records it.
 
-  todo add <text...>              add an item
+  todo add [--at N] <text...>     add an item (at position N, default the end)
+  todo edit <n> <text...>         replace item n's text, keeping its state and place
+  todo mv <n>... <to>             move items (in list order) so the first lands at position <to>
   todo ls                         numbered list
   todo done|fail|wip|undo <n>...  mark done 󰄵 / failed 󰅘 / partial 󰛲 / back to open 󰄱
   todo rm <n>...                  remove
@@ -304,10 +306,32 @@ def main():
         die("no session: pass --session, set CLAUDE_TODO_SESSION, or run inside a Claude tmux pane")
     items = load(sid)
     if cmd == "add":
+        at = len(items)
+        if rest[:1] == ["--at"]:
+            if len(rest) < 2 or not rest[1].isdigit():
+                die("--at needs a position")
+            at, rest = min(max(int(rest[1]) - 1, 0), len(items)), rest[2:]
         text = " ".join(rest).strip()
         if not text:
             die("add needs text")
-        items.append([" ", text])
+        items.insert(at, [" ", text])
+        save(sid, items)
+        show(items)
+    elif cmd == "edit":
+        if len(rest) < 2:
+            die("edit takes <n> <text...>")
+        i = indices(items, rest[:1])[0]
+        items[i][1] = " ".join(rest[1:]).strip()
+        save(sid, items)
+        show(items)
+    elif cmd in ("mv", "move"):
+        if len(rest) < 2 or not rest[-1].isdigit():
+            die("mv takes <n>... <to>")
+        pick = set(indices(items, rest[:-1]))
+        moving = [x for i, x in enumerate(items) if i in pick]
+        keep = [x for i, x in enumerate(items) if i not in pick]
+        at = min(max(int(rest[-1]) - 1, 0), len(keep))
+        items = keep[:at] + moving + keep[at:]
         save(sid, items)
         show(items)
     elif cmd == "ls":

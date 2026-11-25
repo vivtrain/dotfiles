@@ -32,8 +32,10 @@ It works in any DavisMechatronics repo. Run commands from the repo's canon check
 
 `mcp__statusline-todo__todo` is often a deferred tool. If it is, load its schema first with ToolSearch `select:mcp__statusline-todo__todo`. Don't guess its parameters: it ignores unknown fields without an error, so a wrong call like `text: "..."` just returns "Nothing to add."
 
-- `action` (required): `list` | `add` | `done` | `fail` | `wip` | `undo` | `remove` | `clear`.
-- `add` takes `items`: an array of strings, one per item. Several items fit in one call.
+- `action` (required): `list` | `add` | `edit` | `move` | `done` | `fail` | `wip` | `undo` | `remove` | `clear`.
+- `add` takes `items`: an array of strings, one per item. Several items fit in one call. Optional `to`: the 1-based position to insert at (default: the end).
+- `edit` takes `indices` and `items` paired one-to-one: each index gets the new text. The item keeps its state and position.
+- `move` takes `indices` and `to`: those items, in list order, land at position `to`, keeping their states.
 - `done` / `fail` / `wip` / `undo` / `remove` take `indices`: an array of 1-based ints, as `list` shows them.
 - `clear` removes done items; with `all: true` it removes everything.
 - Every call returns the list after the change, so check indices there.
@@ -41,7 +43,11 @@ It works in any DavisMechatronics repo. Run commands from the repo's canon check
 ```json
 {"action": "add", "items": ["[󰇧 #412 fix lidar sync](https://github.com/DavisMechatronics/robocore/pull/412) (Evan; to review; green)", "[󰇧 #415 bump zed sdk](https://github.com/DavisMechatronics/robocore/pull/415) (James; to review; running)"]}
 {"action": "wip", "indices": [2]}
+{"action": "edit", "indices": [1], "items": ["[󰇧 #412 fix lidar sync](https://github.com/DavisMechatronics/robocore/pull/412) (Evan; reviewed ✔; green)"]}
+{"action": "add", "items": ["[󰇧 #413 tune arm pid](https://github.com/DavisMechatronics/robocore/pull/413) (Josh; to review; green)"], "to": 2}
 ```
+
+Trackers started before `edit`, `move` and `to` existed won't have them in the tool. Use the CLI instead, which finds this session from the tmux pane: `todo edit N <text>`, `todo mv N <to>`, `todo add --at N <text>`.
 
 ## 0. Name the window
 
@@ -69,7 +75,7 @@ gh pr list --state open --search "review-requested:@me -author:@me" --json $F
 gh pr list --state open --search "reviewed-by:@me -author:@me" --json $F
 ```
 
-Add one todo item per PR:
+Add one todo item per PR, in ascending PR-number order:
 
 - PR tracker: `[󰇧 #N short title](<url>) (<reviewers>; <CI>)`
 - Review tracker: `[󰇧 #N short title](<url>) (<Author>; <my state>; <CI>)`, where my state is `to review`, `re-review` (re-requested, or author pushed since my review), `reviewed ✔`, `changes req'd` or `commented`. Add `draft` if it is one.
@@ -82,9 +88,9 @@ Rules for both:
   - Otherwise ✘ (`fail`) when changes are requested, ✔ (`done`) when it's done, else ☐ open (`undo`).
   - In review tracker an item goes back to ☐ when Vivek is re-requested or the author pushes after his review.
   - Set states with the todo tool's `done`, `fail`, `wip` and `undo` actions. If the tool rejects `fail` or `wip` (this session started before they existed), use the CLI, which finds this session from the tmux pane: `todo fail N`, `todo wip N`, `todo done N`, `todo undo N`.
-  - Re-adding an item to update its text resets it to ☐, so set its state again right after.
 - **Rendering:** the status line renders `[text](url)` as a clickable link. Keep `[` out of the link text.
-- **Updating an item:** text can't be edited in place. Remove the item and add it again, then check its index with `list`, because indices shift.
+- **Order:** keep the list in ascending PR-number order at all times. A new PR goes in with `add` and `to` at its sorted position, not at the end.
+- **Updating an item:** use `edit`, which keeps its place and state. Don't remove and re-add it, which moves it to the end and resets it to ☐. Removing an item shifts the indices after it, so take indices from the list the call returns.
 
 Show Vivek a short status table, using links that follow the global CLAUDE.md glyph rules:
 
